@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import icons from '@/constants/icons';
+import colors from '@/constants/colors';
 import TabIcon from '@/components/TabIcon';
 
 const _layout = () => {
@@ -15,23 +16,23 @@ const _layout = () => {
           alignItems: 'center',
         },
         tabBarStyle: {
-          backgroundColor: '#0F0D23',
+          backgroundColor: colors.text,
           borderRadius: 50,
           marginHorizontal: 20,
           marginBottom: 36,
           height: 52,
           position: 'absolute',
           overflow: 'hidden',
-          borderWidth: 1,
-          borderColor: '#0F0D23',
+          borderWidth: 0, // hiding border for now
+          borderColor: colors.accent,
         },
       }}
-      initialRouteName="index"
+      initialRouteName='index'
     >
       <Tabs.Screen
         name='ProfileScreen'
         options={{
-          title: 'ProfileScreen',
+          title: 'Profile',
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TabIcon focused={focused} icon={icons.person} title='Profile' />

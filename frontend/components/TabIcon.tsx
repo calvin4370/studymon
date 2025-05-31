@@ -1,5 +1,5 @@
 import images from '@/constants/images';
-import React from 'react';
+import colors from '@/constants/colors'
 import {
   Image,
   ImageBackground,
@@ -23,8 +23,8 @@ const TabIcon = ({ focused, icon, title }: TabIconProps) => {
         min-h-16 mt-4 justify-center items-center rounded-full
         overflow-hidden'
       >
-        <Image source={icon} tintColor='#151312' className='size-5' />
-        <Text className='text-secondary text-base font-semibold ml-2'>
+        <Image source={icon} tintColor={colors.text} className='size-6' />
+        <Text className='text-text text-[12px] font-semibold ml-1'>
           {title}
         </Text>
       </ImageBackground>
@@ -35,7 +35,7 @@ const TabIcon = ({ focused, icon, title }: TabIconProps) => {
         className='size-full justify-center items-center mt-4 
       rounded-full'
       >
-        <Image source={icon} tintColor='#A8B5DB' className='size-5' />
+        <Image source={icon} tintColor={colors.accentLight} className='size-6' />
       </View>
     );
   }
