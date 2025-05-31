@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Dimensions, ActivityIndicator } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import {
@@ -7,6 +7,8 @@ import {
 } from 'react-native-safe-area-context';
 import ThemedTextInput from '@/components/ThemedTextInput';
 import images from '@/constants/images';
+import { FIREBASE_AUTH } from "@/firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = () => {
   // Calculate the usable width inside the safe area
@@ -18,21 +20,33 @@ const LoginScreen = () => {
   // Email and Password ThemedTextInputs
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
+  // Loading State
+  const [loading, setLoading] = useState(false);
 
-  // Log In Button
   const router = useRouter();
-  const handleLogIn = () => {
-    console.log(
-      `Log In Button Pressed with email: ${emailInput || 'BLANK'} and password: ${passwordInput || 'BLANK'}`
-    );
-    // TODO: Add User Auth
+  const auth = FIREBASE_AUTH;
+
+  // Log In Using Firebase Auth
+  const handleLogIn = async () => {
+    console.log(`Attempting login with email: ${emailInput}`);
+    setLoading(true); // Start loading spinner
+
+    try {
+      const response = await signInWithEmailAndPassword(auth, emailInput, passwordInput);
+      console.log('Login successful:', response);
+      router.replace('./tabs')
+      alert('Login successful!');
+    } catch (error: any) {
+      console.error('Login failed:', error);
+      alert('Login failed: ' + error.message);
+    } finally {
+      setLoading(false); // Stop loading spinner
+    }
   };
 
   // Sign Up Button
   const handleSignIn = () => {
-    console.log('Sign In Button Pressed!');
     router.push('/SignUpScreen');
-    // TODO: Finish Sign Up Screen and backend user auth
   };
 
   return (
@@ -61,16 +75,20 @@ const LoginScreen = () => {
           onChangeText={(text: string) => setPasswordInput(text)}
         />
 
-        {/* Log In Button */}
-        <TouchableOpacity
-          onPress={() => handleLogIn()}
-          style={{ width: usableWidth - xPadding * 2, height: 64 }}
-          className='bg-accent rounded-full justify-center items-center self-center shadow-lg active:opacity-75'
-        >
-          <Text className='text-background text-[22px] font-semibold'>
-            Log In
-          </Text>
-        </TouchableOpacity>
+        {/* Log In Button or Loading Spinner */}
+        {loading ? (
+            <ActivityIndicator size="large" color="#0000ff" className="mt-[16px]" />
+        ) : (
+            <TouchableOpacity
+                onPress={handleLogIn}
+                style={{ width: usableWidth - xPadding * 2, height: 64 }}
+                className='bg-accent rounded-full justify-center items-center self-center shadow-lg active:opacity-75 mt-[16px]'
+            >
+              <Text className='text-background text-[22px] font-semibold'>
+                Log In
+              </Text>
+            </TouchableOpacity>
+        )}
       </View>
 
       {/* For Sign Up */}
