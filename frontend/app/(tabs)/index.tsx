@@ -57,7 +57,16 @@ export default function Index() {
       <View className='flex-1 items-center p-6 mt-[100px]'>
         {/* Pan Handle Timer */}
         <View className='items-center mt-[10px]'>
-          <Image source={images.timerPlaceholder} />
+          <TouchableOpacity
+            onPress={() =>
+              alert(
+                'This is meant to be an interactable pan handle component to adjust Timer'
+              )
+            }
+            activeOpacity={0.85}
+          >
+            <Image source={images.timerPlaceholder} />
+          </TouchableOpacity>
         </View>
 
         {/* Timer Display */}
