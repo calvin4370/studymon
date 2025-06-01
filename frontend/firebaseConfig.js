@@ -10,12 +10,12 @@ import { getAuth } from 'firebase/auth';
 
 // Initialize Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyAF6W7QyxTHUJhEuXwoCWu-iNqQxw5rg1k",
-    authDomain: "studymon.firebaseapp.com",
-    projectId: "studymon",
-    storageBucket: "studymon.firebasestorage.app",
-    messagingSenderId: "620222071644",
-    appId: "1:620222071644:web:d3afab5b993bbf6847f799"
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
 };
 
 export const FIREBASE_APP = initializeApp(firebaseConfig);
