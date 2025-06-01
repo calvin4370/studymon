@@ -9,7 +9,7 @@ const SettingsScreen = () => {
 
   const handleLogOut = () => {
     console.log('Logged Out!')
-    router.replace('/LoginScreen');
+    router.replace('/(auth)/LoginScreen');
   };
 
   return (

@@ -57,7 +57,7 @@ const LoginScreen = () => {
 
   // Sign Up Button
   const handleSignIn = () => {
-    router.push('/SignUpScreen');
+    router.push('/(auth)/SignUpScreen');
   };
 
   return (
@@ -73,13 +73,16 @@ const LoginScreen = () => {
         className='bg-background rounded-[20px] shadow-lg px-[24px] py-[16px]'
         style={{ width: usableWidth - 60 }}
       >
+        {/* Email Input */}
         <Text className='text-text text-[16px] font-bold mb-[12px]'>Email</Text>
         <ThemedTextInput
           placeholder='Enter your email'
           value={emailInput}
           onChangeText={(text: string) => setEmailInput(text)}
         />
-        <Text className='text-text text-[16px] font-bold mb-[12px]'>
+
+        {/* Password Input */}
+        <Text className='text-text text-[16px] font-bold mt-[15px] mb-[12px]'>
           Password
         </Text>
         <ThemedTextInput
@@ -99,7 +102,7 @@ const LoginScreen = () => {
           <TouchableOpacity
             onPress={handleLogIn}
             style={{ width: usableWidth - xPadding * 2, height: 64 }}
-            className='bg-accent rounded-full justify-center items-center self-center shadow-lg active:opacity-75 mt-[16px]'
+            className='bg-accent rounded-full justify-center items-center self-center shadow-lg active:opacity-75 mt-[26px]'
           >
             <Text className='text-background text-[22px] font-semibold'>
               Log In

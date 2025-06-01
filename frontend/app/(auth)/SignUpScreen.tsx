@@ -1,6 +1,7 @@
 import {
   Text,
   View,
+  Image,
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
@@ -14,6 +15,7 @@ import {
 import ThemedTextInput from '@/components/ThemedTextInput';
 import { FIREBASE_AUTH } from '@/firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import images from '@/constants/images';
 
 const SignUpScreen = () => {
   const insets = useSafeAreaInsets();
@@ -48,7 +50,13 @@ const SignUpScreen = () => {
   };
 
   return (
-    <SafeAreaView className='flex-1 bg-primary items-center justify-center'>
+    <SafeAreaView className='flex-1 bg-primary items-center'>
+      {/* StudyMon Logo */}
+      <View className='items-center mb-[30px] pt-[40px]'>
+        <Image source={images.studymonLogo} />
+        <Text className='text-text text-[32px] font-extrabold'>StudyMon</Text>
+      </View>
+
       <View
         className='bg-background rounded-[20px] shadow-lg px-[24px] py-[16px]'
         style={{ width: usableWidth - 60 }}
