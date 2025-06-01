@@ -1,18 +1,40 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import HeaderBar from '@/components/HeaderBar';
+import Avatar from '@/components/Avatar';
+import images from '@/constants/images';
 
 const ProfileScreen = () => {
   return (
-    <SafeAreaView className='flex-1 bg-primary items-center justify-center'>
-      <View className=''>
-        <Text className='text-text text-5xl'>To Be Done</Text>
+    <SafeAreaView className='flex-1 bg-background items-center justify-start'>
+      <View>
+        <HeaderBar />
       </View>
-      <TouchableOpacity
-        onPress={() => console.log('Start Button Pressed')}
-        className='w-[200px] h-[70px] bg-accent rounded-full justify-center items-center shadow-lg border-2 border-accent-1 active:opacity-75 mb-[100px]'
+
+      <ScrollView
+        className='flex-1'
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          minHeight: '100%',
+          paddingBottom: 10,
+          alignItems: 'center'
+        }}
       >
-        <Text className='text-text text-[24px] font-bold'>Temporary Link to Login Screen</Text>
-      </TouchableOpacity>
+        {/* Profile Avatar */}
+        <View className='mt-[50px]'>
+          <Avatar source={images.timerActive} />
+          <Text className='text-text text-[32px] font-bold self-center mt-[16px]'>
+            Username
+          </Text>
+          <Text className='text-text text-[20px] font-medium self-center'>
+            Email
+          </Text>
+        </View>
+
+        {/* Statistics */}
+        {/* Placeholder for now */}
+        <Image source={images.statisticsPlaceholder} className='mt-[36px]' />
+      </ScrollView>
     </SafeAreaView>
   );
 };
