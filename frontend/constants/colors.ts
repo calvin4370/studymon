@@ -9,7 +9,8 @@ const text2 = '#85878B';
 const colors = {
   background,
   primary,
-  accent, accentLight,
+  accent,
+  accentLight,
   accent2,
   text,
   text2,

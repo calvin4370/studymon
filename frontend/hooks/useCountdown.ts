@@ -16,8 +16,8 @@ const useCountdown = () => {
   function startCountdown(seconds: number) {
     setSecondsLeft(seconds);
   }
-  
-  return {secondsLeft, startCountdown};
+
+  return { secondsLeft, startCountdown };
 };
 
 export default useCountdown;

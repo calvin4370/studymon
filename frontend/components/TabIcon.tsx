@@ -1,5 +1,5 @@
 import images from '@/constants/images';
-import colors from '@/constants/colors'
+import colors from '@/constants/colors';
 import {
   Image,
   ImageBackground,
@@ -35,7 +35,11 @@ const TabIcon = ({ focused, icon, title }: TabIconProps) => {
         className='size-full justify-center items-center mt-4 
       rounded-full'
       >
-        <Image source={icon} tintColor={colors.accentLight} className='size-6' />
+        <Image
+          source={icon}
+          tintColor={colors.accentLight}
+          className='size-6'
+        />
       </View>
     );
   }

@@ -11,7 +11,7 @@ const icons = {
   clock,
   gear,
   person,
-  menu
+  menu,
 };
 
 export default icons;

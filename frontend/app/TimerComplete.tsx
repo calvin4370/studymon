@@ -1,9 +1,15 @@
-import { View, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native'
-import { useLocalSearchParams, useRouter } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
-import colors from '@/constants/colors'
-import images from '@/constants/images'
-import functions from '@/constants/functions'; 
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import colors from '@/constants/colors';
+import images from '@/constants/images';
+import functions from '@/constants/functions';
 
 const TimerComplete = () => {
   const router = useRouter();
@@ -13,8 +19,8 @@ const TimerComplete = () => {
     : parseInt(params.fullDuration, 10);
 
   const handleReturn = () => {
-    router.replace('/(tabs)') // Go back to index.tsx (TimerScreen)
-  }
+    router.replace('/(tabs)'); // Go back to index.tsx (TimerScreen)
+  };
 
   return (
     <SafeAreaView className='flex-1 bg-primary'>
@@ -30,7 +36,9 @@ const TimerComplete = () => {
         {/* Timer Complete Message*/}
         <View className='items-center mt-[20px]'>
           <Text className='text-text text-[22px]'>You focused for: </Text>
-          <Text className='text-text text-[22px] font-semibold'>{functions.formatTimeAsSentence(fullDuration)}!</Text>
+          <Text className='text-text text-[22px] font-semibold'>
+            {functions.formatTimeAsSentence(fullDuration)}!
+          </Text>
         </View>
 
         {/* Give Up Button */}
@@ -42,7 +50,7 @@ const TimerComplete = () => {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default TimerComplete
+export default TimerComplete;

@@ -28,9 +28,9 @@ const TimerActive = () => {
       }
       console.log('Timer finished on TimerActiveScreen!');
       router.replace({
-      pathname: '/TimerComplete',
-      params: { fullDuration: fullDuration },
-    });
+        pathname: '/TimerComplete',
+        params: { fullDuration: fullDuration },
+      });
       return;
     }
 

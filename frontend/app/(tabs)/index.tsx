@@ -13,7 +13,7 @@ export default function Index() {
   const router = useRouter();
   const [timerModalVisible, setTimerModalVisible] = useState<boolean>(false);
   const [timerSeconds, setTimerSeconds] = useState<number>(10); // Default timer to 30 minutes
-  const [inputText, setInputText] = useState<string>('')
+  const [inputText, setInputText] = useState<string>('');
 
   const handleTimerStart = () => {
     console.log(`Timer started with ${timerSeconds} seconds`);
@@ -24,17 +24,21 @@ export default function Index() {
   };
 
   const handleConfirm = () => {
-    const inputMinutes = parseInt(inputText, 10)
+    const inputMinutes = parseInt(inputText, 10);
 
     // Validate Input
     if (inputText === 'test') {
-      setTimerSeconds(10)
-    } else if (!isNaN(inputMinutes) && inputMinutes >= 1 && inputMinutes <= 180) {
-      setTimerSeconds(inputMinutes * 60)
+      setTimerSeconds(10);
+    } else if (
+      !isNaN(inputMinutes) &&
+      inputMinutes >= 1 &&
+      inputMinutes <= 180
+    ) {
+      setTimerSeconds(inputMinutes * 60);
     } else {
-      alert('Input a number of minutes between 1 and 180')
+      alert('Input a number of minutes between 1 and 180');
     }
-    setInputText('') // Reset text for future input
+    setInputText(''); // Reset text for future input
     setTimerModalVisible(false);
   };
 
@@ -77,7 +81,6 @@ export default function Index() {
       <Modal
         visible={timerModalVisible}
         animationType='slide'
-        className=''
         presentationStyle='formSheet'
         onRequestClose={() => setTimerModalVisible(false)} // handles Android back button / IOS back gesture
       >
@@ -98,7 +101,9 @@ export default function Index() {
               onPress={handleCancel}
               className='w-[150px] h-[60px] bg-accent rounded-full justify-center items-center shadow-lg border-2 border-accent-2 active:opacity-75 mt-[50px]'
             >
-              <Text className='text-accent-2 text-[24px] font-bold'>Cancel</Text>
+              <Text className='text-accent-2 text-[24px] font-bold'>
+                Cancel
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity

@@ -1,7 +1,7 @@
 // Helper function to add leading 0 to number (up to 2 digits)
 function padWithZero(num: number): string {
   return num.toString().padStart(2, '0');
-};
+}
 
 // Helper function to convert seconds to [hours, minutes, seconds]
 function formatTime(seconds: number): number[] {
@@ -10,11 +10,11 @@ function formatTime(seconds: number): number[] {
   const s = seconds % 60;
 
   return [h, m, s];
-};
+}
 
 function formatTimeAsSentence(seconds: number) {
   const resultSentence: string[] = [];
-  const [h, m, s] = formatTime(seconds)
+  const [h, m, s] = formatTime(seconds);
 
   if (h > 0) {
     resultSentence.push(`${h} hour${h > 1 ? 's' : ''}`);
@@ -22,7 +22,8 @@ function formatTimeAsSentence(seconds: number) {
   if (m > 0) {
     resultSentence.push(`${m} minute${m > 1 ? 's' : ''}`);
   }
-  if (s > 0 || resultSentence.length === 0) { // Always show seconds if hours and minutes are zero
+  if (s > 0 || resultSentence.length === 0) {
+    // Always show seconds if hours and minutes are zero
     resultSentence.push(`${s} second${s > 1 ? 's' : ''}`);
   }
 
@@ -34,14 +35,14 @@ function formatTimeAsSentence(seconds: number) {
   } else if (resultSentence.length === 1) {
     return resultSentence[0];
   } else {
-    return "0 seconds";
+    return '0 seconds';
   }
 }
 
 const functions = {
   padWithZero,
   formatTime,
-  formatTimeAsSentence
-}
+  formatTimeAsSentence,
+};
 
-export default functions
+export default functions;

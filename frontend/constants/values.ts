@@ -6,8 +6,8 @@ const MIN_TIME_SECONDS = 5;
 const values = {
   DEFAULT_INITIAL_TIME,
   MAX_TIME_SECONDS,
-  MIN_TIME_SECONDS
-}
+  MIN_TIME_SECONDS,
+};
 
 export default values;
 

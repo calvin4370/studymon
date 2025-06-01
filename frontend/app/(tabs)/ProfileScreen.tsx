@@ -17,7 +17,7 @@ const ProfileScreen = () => {
         contentContainerStyle={{
           minHeight: '100%',
           paddingBottom: 10,
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         {/* Profile Avatar */}
