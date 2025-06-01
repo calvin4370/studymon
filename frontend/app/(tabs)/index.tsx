@@ -42,7 +42,7 @@ export default function Index() {
 
         {/* Start Button */}
         <TouchableOpacity
-          onPress={() => console.log('Start Button Pressed')}
+          onPress={() => console.log('Start Button Pressed!')}
           className='w-[180px] h-[60px] bg-primary rounded-full justify-center items-center shadow-lg border-2 border-accent-1 active:opacity-75 mb-[100px]'
         >
           <Text className='text-text text-[24px] font-bold'>Start</Text>

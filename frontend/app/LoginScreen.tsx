@@ -45,7 +45,7 @@ const LoginScreen = () => {
         passwordInput
       );
       console.log('Login successful:', response);
-      router.replace('./tabs');
+      router.replace('/(tabs)');
       alert('Login successful!');
     } catch (error: any) {
       console.error('Login failed:', error);
