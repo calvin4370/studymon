@@ -17,7 +17,7 @@ const ThemedTextInput = ({
 }: ThemedTextInputProps) => {
   return (
     <View
-      className='flex-row items-center bg-background border-[3px] border-accent rounded-full px-5 py-4'
+      className='flex-row items-center bg-background border-[2px] border-accent rounded-full px-5 py-4'
     >
       <TextInput
         onPress={onpress}

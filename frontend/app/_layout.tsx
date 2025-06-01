@@ -7,6 +7,7 @@ export default function RootLayout() {
       <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
       <Stack.Screen name='LoginScreen' options={{ headerShown: false }} />
       <Stack.Screen name='TimerActive' options={{ headerShown: false }} />
+      <Stack.Screen name='TimerComplete' options={{ headerShown: false }} />
     </Stack>
   );
 }

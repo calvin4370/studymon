@@ -1,23 +1,54 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import TimerDisplay from '@/components/TimerDisplay';
 import images from '@/constants/images';
 import colors from '@/constants/colors';
 
 const TimerActive = () => {
   const router = useRouter();
+  const params = useLocalSearchParams(); // Get params passed from previous TimerScreen (index.tsx)
+  const fullDuration = Array.isArray(params.fullDuration)
+    ? parseInt(params.fullDuration[0], 10)
+    : parseInt(params.fullDuration, 10);
+  const [secondsLeft, setSecondsLeft] = useState<number>(fullDuration);
 
   const handleGiveUp = () => {
-    console.log('Give Up Button Pressed!')
-    router.replace('/(tabs)') // Go back to Timer Screen (index.tsx)
-  }
+    console.log('Give Up Button Pressed!');
+    router.replace('/(tabs)'); // Go back to Timer Screen (index.tsx)
+  };
+
+  const intervalRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (secondsLeft <= 0) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      console.log('Timer finished on TimerActiveScreen!');
+      router.replace({
+      pathname: '/TimerComplete',
+      params: { fullDuration: fullDuration },
+    });
+      return;
+    }
+
+    // Set up Timeout interval to decrease secondsLeft by 1 every second
+    intervalRef.current = setInterval(() => {
+      setSecondsLeft((prevSeconds) => prevSeconds - 1);
+    }, 1000);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [secondsLeft, fullDuration, router]);
 
   return (
     <SafeAreaView className='flex-1 bg-primary'>
-      <StatusBar style='dark' backgroundColor={colors.primary}/>
+      <StatusBar style='dark' backgroundColor={colors.primary} />
 
       {/* Main Content */}
       <View className='flex-1 items-center p-6 mt-[100px]'>
@@ -28,7 +59,7 @@ const TimerActive = () => {
 
         {/* Timer Display */}
         <View className='items-center mt-[10px]'>
-          <TimerDisplay seconds={3600} />
+          <TimerDisplay seconds={secondsLeft} />
         </View>
 
         {/* Give Up Button */}
