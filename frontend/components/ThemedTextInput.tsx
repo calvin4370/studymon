@@ -17,7 +17,7 @@ const ThemedTextInput = ({
 }: ThemedTextInputProps) => {
   return (
     <View
-      className='flex-row items-center bg-background  border-[3px] border-accent rounded-full px-5 py-4'
+      className='flex-row items-center bg-background border-[3px] border-accent rounded-full px-5 py-4'
     >
       <TextInput
         onPress={onpress}
@@ -25,7 +25,7 @@ const ThemedTextInput = ({
         placeholderTextColor={colors.text2}
         value={value}
         onChangeText={onChangeText}
-        className='flex-1 ml-2 text-background'
+        className='flex-1 ml-[0px] text-text'
       />
     </View>
   );

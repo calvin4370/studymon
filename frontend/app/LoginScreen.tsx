@@ -1,4 +1,11 @@
-import { View, Text, TouchableOpacity, Image, Dimensions, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  ActivityIndicator,
+} from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import {
@@ -7,8 +14,8 @@ import {
 } from 'react-native-safe-area-context';
 import ThemedTextInput from '@/components/ThemedTextInput';
 import images from '@/constants/images';
-import { FIREBASE_AUTH } from "@/firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_AUTH } from '@/firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const LoginScreen = () => {
   // Calculate the usable width inside the safe area
@@ -32,9 +39,13 @@ const LoginScreen = () => {
     setLoading(true); // Start loading spinner
 
     try {
-      const response = await signInWithEmailAndPassword(auth, emailInput, passwordInput);
+      const response = await signInWithEmailAndPassword(
+        auth,
+        emailInput,
+        passwordInput
+      );
       console.log('Login successful:', response);
-      router.replace('./tabs')
+      router.replace('./tabs');
       alert('Login successful!');
     } catch (error: any) {
       console.error('Login failed:', error);
@@ -57,7 +68,7 @@ const LoginScreen = () => {
         <Text className='text-text text-[32px] font-extrabold'>StudyMon</Text>
       </View>
 
-      {/* Logout Box */}
+      {/* Log In Box */}
       <View
         className='bg-background rounded-[20px] shadow-lg px-[24px] py-[16px]'
         style={{ width: usableWidth - 60 }}
@@ -68,7 +79,9 @@ const LoginScreen = () => {
           value={emailInput}
           onChangeText={(text: string) => setEmailInput(text)}
         />
-        <Text className='text-text text-[16px] font-bold mb-[12px]'>Password</Text>
+        <Text className='text-text text-[16px] font-bold mb-[12px]'>
+          Password
+        </Text>
         <ThemedTextInput
           placeholder='Enter your password'
           value={passwordInput}
@@ -77,17 +90,21 @@ const LoginScreen = () => {
 
         {/* Log In Button or Loading Spinner */}
         {loading ? (
-            <ActivityIndicator size="large" color="#0000ff" className="mt-[16px]" />
+          <ActivityIndicator
+            size='large'
+            color='#0000ff'
+            className='mt-[16px]'
+          />
         ) : (
-            <TouchableOpacity
-                onPress={handleLogIn}
-                style={{ width: usableWidth - xPadding * 2, height: 64 }}
-                className='bg-accent rounded-full justify-center items-center self-center shadow-lg active:opacity-75 mt-[16px]'
-            >
-              <Text className='text-background text-[22px] font-semibold'>
-                Log In
-              </Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleLogIn}
+            style={{ width: usableWidth - xPadding * 2, height: 64 }}
+            className='bg-accent rounded-full justify-center items-center self-center shadow-lg active:opacity-75 mt-[16px]'
+          >
+            <Text className='text-background text-[22px] font-semibold'>
+              Log In
+            </Text>
+          </TouchableOpacity>
         )}
       </View>
 
