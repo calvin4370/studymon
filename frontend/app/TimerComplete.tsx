@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import colors from '@/constants/colors';
 import images from '@/constants/images';
 import functions from '@/constants/functions';
 
@@ -24,7 +23,7 @@ const TimerComplete = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-primary'>
-      <StatusBar style='dark' backgroundColor={colors.primary} />
+      <StatusBar style='dark' />
 
       {/* Main Content */}
       <View className='flex-1 items-center p-6 mt-[100px]'>
