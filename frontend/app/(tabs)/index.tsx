@@ -3,7 +3,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
-import colors from '@/constants/colors';
 import HeaderBar from '@/components/HeaderBar';
 import TimerDisplay from '@/components/TimerDisplay';
 import ThemedTextInput from '@/components/ThemedTextInput';
@@ -48,7 +47,7 @@ export default function Index() {
 
   return (
     <SafeAreaView className='flex-1 bg-background items-center'>
-      <StatusBar style='dark' backgroundColor={colors.primary} />
+      <StatusBar style='dark' />
 
       {/* Top Banner */}
       <HeaderBar />
