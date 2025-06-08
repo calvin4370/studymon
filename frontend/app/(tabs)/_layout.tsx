@@ -17,7 +17,7 @@ const _layout = () => {
         },
         tabBarStyle: {
           backgroundColor: colors.text,
-          borderRadius: 50,
+          borderRadius: 40,
           marginHorizontal: 20,
           marginBottom: 36,
           height: 52,
@@ -27,7 +27,7 @@ const _layout = () => {
           borderColor: colors.accent,
         },
       }}
-      initialRouteName='index'
+      initialRouteName='index' // Timer Screen
     >
       <Tabs.Screen
         name='ProfileScreen'
