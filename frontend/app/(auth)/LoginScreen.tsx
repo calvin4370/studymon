@@ -78,6 +78,7 @@ const LoginScreen = () => {
         <ThemedTextInput
           placeholder='Enter your email'
           value={emailInput}
+          autoCapitalize='none'
           onChangeText={(text: string) => setEmailInput(text)}
         />
 
@@ -89,6 +90,7 @@ const LoginScreen = () => {
           placeholder='Enter your password'
           value={passwordInput}
           onChangeText={(text: string) => setPasswordInput(text)}
+          secureTextEntry={true}
         />
 
         {/* Log In Button or Loading Spinner */}
