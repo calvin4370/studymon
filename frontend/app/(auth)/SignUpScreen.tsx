@@ -13,9 +13,10 @@ import {
   SafeAreaView,
 } from 'react-native-safe-area-context';
 import ThemedTextInput from '@/components/ThemedTextInput';
-import { FIREBASE_AUTH } from '@/firebaseConfig';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {FIREBASE_AUTH, FIREBASE_DATABASE} from '@/firebaseConfig';
+import {createUserWithEmailAndPassword, deleteUser} from 'firebase/auth';
 import images from '@/constants/images';
+import {doc, getDoc, serverTimestamp, setDoc} from "@firebase/firestore";
 
 const SignUpScreen = () => {
   const insets = useSafeAreaInsets();
@@ -33,11 +34,31 @@ const SignUpScreen = () => {
   const handleSignUp = async () => {
     setLoading(true);
     try {
+      // For authentication
       const response = await createUserWithEmailAndPassword(
           auth,
           email,
           password
       );
+
+      // Creating user document in Firestore
+      const userRef = doc(FIREBASE_DATABASE, 'users', response.user.uid);
+      const userSnap = await getDoc(userRef);
+      if (!userSnap.exists()) {
+        await setDoc(userRef, { // all the fields are here
+          email: response.user.email,
+          displayName: response.user.displayName || '',
+          totalFocusTime: 0,
+          collection: [],
+          createdAt: serverTimestamp(),
+        })
+      } else { // account already exists
+        await deleteUser(response.user);
+        alert('Account already exists. Please try again or log in.');
+        setLoading(false);
+        return;
+      }
+
       console.log('Sign up successful:', response);
       alert('Account created! You are now signed in.');
       router.replace('/(tabs)'); // Timer Screen
