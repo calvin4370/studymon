@@ -7,10 +7,8 @@ import {
   Dimensions,
 } from 'react-native';
 import {
-  SafeAreaView,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import HeaderBar from '@/components/HeaderBar';
 import Avatar from '@/components/Avatar';
 import images from '@/constants/images';
 
@@ -25,11 +23,7 @@ const ProfileScreen = () => {
     alert("This will link to the User's statistics page");
   };
   return (
-    <SafeAreaView className='flex-1 bg-background items-center justify-start'>
-      <View>
-        <HeaderBar />
-      </View>
-
+    <View className='flex-1 bg-background items-center justify-start'>
       <ScrollView
         className='flex-1'
         showsVerticalScrollIndicator={false}
@@ -85,7 +79,7 @@ const ProfileScreen = () => {
           <Image source={images.statisticsPlaceholder} className='mt-[36px]' />
         </TouchableOpacity>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

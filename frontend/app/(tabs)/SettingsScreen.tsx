@@ -1,7 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import HeaderBar from '@/components/HeaderBar';
 import { signOut } from '@firebase/auth';
 import { FIREBASE_AUTH } from '@/firebaseConfig';
 
@@ -26,10 +24,7 @@ const SettingsScreen = () => {
   };
 
   return (
-    <SafeAreaView className='flex-1 bg-background items-center justify-start'>
-      <View>
-        <HeaderBar />
-      </View>
+    <View className='flex-1 bg-background items-center justify-start'>
 
       <View className='flex-1 w-full items-center justify-start mt-10'>
         {[
@@ -55,7 +50,7 @@ const SettingsScreen = () => {
       >
         <Text className='text-text text-[24px] font-bold'>Log Out</Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 };
 

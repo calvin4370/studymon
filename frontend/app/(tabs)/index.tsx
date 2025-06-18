@@ -1,9 +1,7 @@
 import { Text, View, Image, TouchableOpacity, Modal } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
-import HeaderBar from '@/components/HeaderBar';
 import TimerDisplay from '@/components/TimerDisplay';
 import ThemedTextInput from '@/components/ThemedTextInput';
 import images from '@/constants/images';
@@ -46,14 +44,11 @@ export default function Index() {
   };
 
   return (
-    <SafeAreaView className='flex-1 bg-background items-center'>
+    <View className='flex-1 bg-background items-center'>
       <StatusBar style='dark' />
 
-      {/* Top Banner */}
-      <HeaderBar />
-
       {/* Main Content */}
-      <View className='flex-1 items-center p-6 mt-[100px]'>
+      <View className='flex-1 items-center p-6 mt-[50px]'>
         {/* Pan Handle Timer */}
         <View className='items-center mt-[10px]'>
           <TouchableOpacity
@@ -123,6 +118,6 @@ export default function Index() {
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 }
