@@ -4,12 +4,10 @@ import icons from '@/constants/icons';
 import colors from '@/constants/colors';
 import TabIcon from '@/components/TabIcon';
 import {SafeAreaView} from "react-native-safe-area-context";
-import HeaderBar from "@/components/HeaderBar";
 
 const _layout = () => {
   return (
-    <SafeAreaView className={'flex-1 bg-background'}>
-      <HeaderBar />
+    <SafeAreaView className={'flex-1 bg-background'} edges={['bottom', 'left', 'right']}>
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
