@@ -1,6 +1,12 @@
-import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  ReactNode,
+} from "react";
 import { FIREBASE_AUTH } from "@/firebaseConfig";
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, User } from "firebase/auth";
 
 interface AuthContextType {
   user: User | null;
@@ -12,18 +18,23 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // AuthProvider component
-export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
 
   useEffect(() => {
     // Listen to Firebase's authentication state changes
-    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authenticatedUser) => {
-      setUser(authenticatedUser);
-      setUserLoggedIn(!!authenticatedUser);
-      setIsLoadingAuth(false);
-    });
+    const unsubscribe = onAuthStateChanged(
+      FIREBASE_AUTH,
+      (authenticatedUser) => {
+        setUser(authenticatedUser);
+        setUserLoggedIn(!!authenticatedUser);
+        setIsLoadingAuth(false);
+      },
+    );
 
     return () => unsubscribe();
   }, []);
@@ -39,7 +50,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
