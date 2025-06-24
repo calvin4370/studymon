@@ -50,6 +50,7 @@ const SignUpScreen = () => {
           email: response.user.email,
           displayName: response.user.displayName || "",
           totalFocusTime: 0,
+          coins: 0,
           collection: [],
           createdAt: serverTimestamp(),
         });
