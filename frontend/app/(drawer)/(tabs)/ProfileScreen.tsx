@@ -64,7 +64,7 @@ const ProfileScreen = () => {
             Time Spent Focused: 0h
           </Text>
           <Text className='text-background text-[16px] font-medium mt-[10px]'>
-            Collection: {'(0 / 151)'}
+            Collection: {'(0 / 212)'}
           </Text>
         </TouchableOpacity>
 

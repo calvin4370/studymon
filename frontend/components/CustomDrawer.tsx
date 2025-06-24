@@ -1,8 +1,8 @@
-import {Text} from 'react-native'
-import React from 'react'
-import {Drawer} from "expo-router/drawer";
-import colors from "@/constants/colors";
-import {Ionicons} from "@expo/vector-icons";
+import { Text } from 'react-native';
+import React from 'react';
+import { Drawer } from 'expo-router/drawer';
+import colors from '@/constants/colors';
+import { Ionicons } from '@expo/vector-icons';
 
 const CustomDrawer = () => {
   return (
@@ -30,46 +30,46 @@ const CustomDrawer = () => {
         },
         drawerContentContainerStyle: {
           paddingTop: 105,
-        }
+        },
       }}
     >
       <Drawer.Screen
-        name="(tabs)"
+        name='(tabs)'
         options={{
           title: 'Home',
           drawerIcon: () => (
-            <Ionicons name="home" size={24} color={colors.text} />
+            <Ionicons name='home' size={24} color={colors.text} />
           ),
         }}
       />
       <Drawer.Screen
-        name="StoreScreen"
+        name='StoreScreen'
         options={{
           title: 'Store',
           drawerIcon: () => (
-            <Ionicons name="cart" size={24} color={colors.text} />
+            <Ionicons name='cart' size={24} color={colors.text} />
           ),
         }}
       />
       <Drawer.Screen
-        name="FriendsScreen"
+        name='FriendsScreen'
         options={{
           title: 'Friends',
           drawerIcon: () => (
-            <Ionicons name="people" size={24} color={colors.text} />
+            <Ionicons name='people' size={24} color={colors.text} />
           ),
         }}
       />
       <Drawer.Screen
-        name="AchievementsScreen"
+        name='AchievementsScreen'
         options={{
           title: 'Achievements',
           drawerIcon: () => (
-            <Ionicons name="trophy" size={24} color={colors.text} />
+            <Ionicons name='trophy' size={24} color={colors.text} />
           ),
         }}
       />
     </Drawer>
-  )
-}
-export default CustomDrawer
+  );
+};
+export default CustomDrawer;

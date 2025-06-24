@@ -1,4 +1,5 @@
 const background = '#F0F1F1';
+const background2 = 'D9D9D9';
 const primary = '#85DADA';
 const accent = '#8586DA';
 const accentLight = '#A8B5DB';
@@ -8,6 +9,7 @@ const text2 = '#85878B';
 
 const colors = {
   background,
+  background2,
   primary,
   accent,
   accentLight,

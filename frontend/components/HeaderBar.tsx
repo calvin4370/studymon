@@ -6,7 +6,13 @@ import colors from '@/constants/colors';
 const HeaderBar = () => {
   return (
     <View className='w-full flex-row bg-primary px-4 py-2 items-center justify-between shadow-md h-[64px]'>
-      <TouchableOpacity onPress={() => alert('This will open a selection for Users to access their Friends, Achievements, Shop etc')}>
+      <TouchableOpacity
+        onPress={() =>
+          alert(
+            'This will open a selection for Users to access their Friends, Achievements, Shop etc'
+          )
+        }
+      >
         <Image
           source={icons.menu} // Use your imported menu icon
           className='m-2 w-6 h-6'
