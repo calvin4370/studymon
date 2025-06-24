@@ -64,13 +64,8 @@ const ProfileScreen = () => {
           <Text className="text-background text-[16px] font-medium mt-[10px]">
             Time Spent Focused: 0h
           </Text>
-<<<<<<< HEAD
-          <Text className='text-background text-[16px] font-medium mt-[10px]'>
-            Collection: {'(0 / 212)'}
-=======
           <Text className="text-background text-[16px] font-medium mt-[10px]">
-            Collection: {"(0 / 151)"}
->>>>>>> 93ae8c8757060ffd4a58d90eba98091e1cabf8bd
+            Collection: {"(0 / 212)"}
           </Text>
         </TouchableOpacity>
 
