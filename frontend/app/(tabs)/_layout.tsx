@@ -3,8 +3,8 @@ import React from 'react';
 import icons from '@/constants/icons';
 import colors from '@/constants/colors';
 import TabIcon from '@/components/TabIcon';
-import {SafeAreaView} from "react-native-safe-area-context";
-import HeaderBar from "@/components/HeaderBar";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import HeaderBar from '@/components/HeaderBar';
 
 const _layout = () => {
   return (
@@ -49,7 +49,11 @@ const _layout = () => {
             title: 'Collection',
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon focused={focused} icon={icons.cards} title='Collection' />
+              <TabIcon
+                focused={focused}
+                icon={icons.cards}
+                title='Collection'
+              />
             ),
           }}
         />
@@ -69,7 +73,11 @@ const _layout = () => {
             title: 'Schedule',
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon focused={focused} icon={icons.calendar} title='Schedule' />
+              <TabIcon
+                focused={focused}
+                icon={icons.calendar}
+                title='Schedule'
+              />
             ),
           }}
         />

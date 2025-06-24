@@ -34,7 +34,7 @@ const TimerComplete = () => {
 
         {/* Timer Complete Message*/}
         <View className='items-center mt-[20px]'>
-          <Text className='text-text text-[22px]'>You focused for: </Text>
+          <Text className='text-text text-[22px]'>You focused for</Text>
           <Text className='text-text text-[22px] font-semibold'>
             {functions.formatTimeAsSentence(fullDuration)}!
           </Text>

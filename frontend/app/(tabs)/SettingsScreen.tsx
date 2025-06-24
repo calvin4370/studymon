@@ -25,7 +25,6 @@ const SettingsScreen = () => {
 
   return (
     <View className='flex-1 bg-background items-center justify-start'>
-
       <View className='flex-1 w-full items-center justify-start mt-10'>
         {[
           { label: 'Profile Settings', route: '/(settings)/Profile' },

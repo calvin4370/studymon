@@ -6,9 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Avatar from '@/components/Avatar';
 import images from '@/constants/images';
 

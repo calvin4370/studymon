@@ -20,7 +20,7 @@ export default function AuthGate({ children }: AuthGateProps) {
   if (isLoadingAuth) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size='large' />
       </View>
     );
   }
