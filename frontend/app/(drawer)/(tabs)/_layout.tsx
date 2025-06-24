@@ -24,7 +24,7 @@ const _layout = () => {
             backgroundColor: colors.text,
             borderRadius: 40,
             marginHorizontal: 20,
-            marginBottom: 15,
+            marginBottom: 0,
             height: 52,
             position: "absolute",
             overflow: "hidden",
