@@ -26,7 +26,7 @@ const TimerComplete = () => {
       <StatusBar style='dark' />
 
       {/* Main Content */}
-      <View className='flex-1 items-center p-6 mt-[100px]'>
+      <View className='flex-1 items-center p-6 mt-[40px]'>
         {/* Pan Handle Timer */}
         <View className='items-center mt-[100px]'>
           <Image source={images.timerActive} />

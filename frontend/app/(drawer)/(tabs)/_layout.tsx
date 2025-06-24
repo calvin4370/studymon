@@ -3,13 +3,16 @@ import React from 'react';
 import icons from '@/constants/icons';
 import colors from '@/constants/colors';
 import TabIcon from '@/components/TabIcon';
+<<<<<<< HEAD:frontend/app/(tabs)/_layout.tsx
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HeaderBar from '@/components/HeaderBar';
+=======
+import {SafeAreaView} from "react-native-safe-area-context";
+>>>>>>> 19c1b73b7c9fee6170329f7a1c5feae7989fa417:frontend/app/(drawer)/(tabs)/_layout.tsx
 
 const _layout = () => {
   return (
-    <SafeAreaView className={'flex-1 bg-background'}>
-      <HeaderBar />
+    <SafeAreaView className={'flex-1 bg-background'} edges={['bottom', 'left', 'right']}>
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
