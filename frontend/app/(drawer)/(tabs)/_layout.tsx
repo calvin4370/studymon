@@ -1,21 +1,24 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import icons from '@/constants/icons';
-import colors from '@/constants/colors';
-import TabIcon from '@/components/TabIcon';
-import {SafeAreaView} from "react-native-safe-area-context";
+import { Tabs } from "expo-router";
+import React from "react";
+import icons from "@/constants/icons";
+import colors from "@/constants/colors";
+import TabIcon from "@/components/TabIcon";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const _layout = () => {
   return (
-    <SafeAreaView className={'flex-1 bg-background'} edges={['bottom', 'left', 'right']}>
+    <SafeAreaView
+      className={"flex-1 bg-background"}
+      edges={["bottom", "left", "right"]}
+    >
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
           tabBarItemStyle: {
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
+            width: "100%",
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center",
           },
           tabBarStyle: {
             backgroundColor: colors.text,
@@ -23,69 +26,69 @@ const _layout = () => {
             marginHorizontal: 20,
             marginBottom: 0,
             height: 52,
-            position: 'absolute',
-            overflow: 'hidden',
+            position: "absolute",
+            overflow: "hidden",
             borderWidth: 0, // hiding border for now
             borderColor: colors.accent,
           },
         }}
-        initialRouteName='index' // Timer Screen
+        initialRouteName="index" // Timer Screen
       >
         <Tabs.Screen
-          name='ProfileScreen'
+          name="ProfileScreen"
           options={{
-            title: 'Profile',
+            title: "Profile",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon focused={focused} icon={icons.person} title='Profile' />
+              <TabIcon focused={focused} icon={icons.person} title="Profile" />
             ),
           }}
         />
         <Tabs.Screen
-          name='CollectionScreen'
+          name="CollectionScreen"
           options={{
-            title: 'Collection',
+            title: "Collection",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
               <TabIcon
                 focused={focused}
                 icon={icons.cards}
-                title='Collection'
+                title="Collection"
               />
             ),
           }}
         />
         <Tabs.Screen
-          name='index'
+          name="index"
           options={{
-            title: 'Timer',
+            title: "Timer",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon focused={focused} icon={icons.clock} title='Timer' />
+              <TabIcon focused={focused} icon={icons.clock} title="Timer" />
             ),
           }}
         />
         <Tabs.Screen
-          name='ScheduleScreen'
+          name="ScheduleScreen"
           options={{
-            title: 'Schedule',
+            title: "Schedule",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
               <TabIcon
                 focused={focused}
                 icon={icons.calendar}
-                title='Schedule'
+                title="Schedule"
               />
             ),
           }}
         />
         <Tabs.Screen
-          name='SettingsScreen'
+          name="SettingsScreen"
           options={{
-            title: 'Settings',
+            title: "Settings",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon focused={focused} icon={icons.gear} title='Settings' />
+              <TabIcon focused={focused} icon={icons.gear} title="Settings" />
             ),
           }}
         />
