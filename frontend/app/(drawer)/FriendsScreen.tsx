@@ -8,4 +8,5 @@ const FriendsScreen = () => {
     </View>
   );
 };
+
 export default FriendsScreen;

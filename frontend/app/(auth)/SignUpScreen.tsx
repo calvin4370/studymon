@@ -42,7 +42,9 @@ const SignUpScreen = () => {
       );
 
       // Creating user document in Firestore
+      // reference to the user document using uid from user from useAuth
       const userRef = doc(FIREBASE_DATABASE, "users", response.user.uid);
+      // Obtains a snapshot of the user document, which could or could not exist
       const userSnap = await getDoc(userRef);
       if (!userSnap.exists()) {
         await setDoc(userRef, {
@@ -56,7 +58,7 @@ const SignUpScreen = () => {
         });
       } else {
         // account already exists
-        await deleteUser(response.user);
+        await deleteUser(response.user); // deletes for the auth
         alert("Account already exists. Please try again or log in.");
         setLoading(false);
         return;
