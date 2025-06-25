@@ -1,8 +1,8 @@
-import { Text } from "react-native";
-import React from "react";
-import { Drawer } from "expo-router/drawer";
-import colors from "@/constants/colors";
-import { Ionicons } from "@expo/vector-icons";
+import { Text } from 'react-native';
+import React from 'react';
+import { Drawer } from 'expo-router/drawer';
+import colors from '@/constants/colors';
+import { Ionicons } from '@expo/vector-icons';
 
 const CustomDrawer = () => {
   return (
@@ -12,9 +12,9 @@ const CustomDrawer = () => {
           backgroundColor: colors.primary,
         },
         headerTintColor: colors.text,
-        headerTitleAlign: "center",
+        headerTitleAlign: 'center',
         headerTitle: () => (
-          <Text className="flex-1 text-text text-[25px] font-extrabold align pt-1.5">
+          <Text className='flex-1 text-text text-[25px] font-extrabold align pt-1.5'>
             StudyMon
           </Text>
         ),
@@ -22,11 +22,11 @@ const CustomDrawer = () => {
           backgroundColor: colors.primary,
           width: 200,
         },
-        drawerType: "front",
+        drawerType: 'front',
         drawerLabelStyle: {
           color: colors.text,
           fontSize: 12,
-          fontWeight: "bold",
+          fontWeight: 'bold',
         },
         drawerContentContainerStyle: {
           paddingTop: 105,
@@ -34,38 +34,38 @@ const CustomDrawer = () => {
       }}
     >
       <Drawer.Screen
-        name="(tabs)"
+        name='(tabs)'
         options={{
-          title: "Home",
+          title: 'Home',
           drawerIcon: () => (
-            <Ionicons name="home" size={24} color={colors.text} />
+            <Ionicons name='home' size={24} color={colors.text} />
           ),
         }}
       />
       <Drawer.Screen
-        name="StoreScreen"
+        name='StoreScreen'
         options={{
-          title: "Store",
+          title: 'Store',
           drawerIcon: () => (
-            <Ionicons name="cart" size={24} color={colors.text} />
+            <Ionicons name='cart' size={24} color={colors.text} />
           ),
         }}
       />
       <Drawer.Screen
-        name="FriendsScreen"
+        name='FriendsScreen'
         options={{
-          title: "Friends",
+          title: 'Friends',
           drawerIcon: () => (
-            <Ionicons name="people" size={24} color={colors.text} />
+            <Ionicons name='people' size={24} color={colors.text} />
           ),
         }}
       />
       <Drawer.Screen
-        name="AchievementsScreen"
+        name='AchievementsScreen'
         options={{
-          title: "Achievements",
+          title: 'Achievements',
           drawerIcon: () => (
-            <Ionicons name="trophy" size={24} color={colors.text} />
+            <Ionicons name='trophy' size={24} color={colors.text} />
           ),
         }}
       />
