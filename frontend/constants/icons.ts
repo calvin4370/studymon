@@ -5,6 +5,7 @@ import gear from '@/assets/icons/gear.png';
 import person from '@/assets/icons/person.png';
 import menu from '@/assets/icons/menu.png';
 import pack from '@/assets/icons/pack.png';
+import coin from '@/assets/icons/coin.png';
 
 // Faculty Icons
 import arts from '@/assets/icons/arts.png';
@@ -25,6 +26,7 @@ const icons = {
   person,
   menu,
   pack,
+  coin,
 
   // Faculties
   arts,

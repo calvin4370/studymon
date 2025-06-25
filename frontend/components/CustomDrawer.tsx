@@ -1,8 +1,9 @@
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
 import { Drawer } from 'expo-router/drawer';
 import colors from '@/constants/colors';
 import { Ionicons } from '@expo/vector-icons';
+import CoinsPill from './CoinsPill';
 
 const CustomDrawer = () => {
   return (
@@ -12,20 +13,28 @@ const CustomDrawer = () => {
           backgroundColor: colors.primary,
         },
         headerTintColor: colors.text,
-        headerTitleAlign: 'center',
+        headerTitleAlign: 'left',
         headerTitle: () => (
-          <Text className='flex-1 text-text text-[25px] font-extrabold align pt-1.5'>
-            StudyMon
-          </Text>
+          <View className='flex-row items-center w-full h-full'>
+            <View className='flex-1 items-center'>
+              <Text className='text-text text-[25px] font-extrabold'>
+                StudyMon
+              </Text>
+            </View>
+            <View className='justify-end ml-auto' >
+              <CoinsPill />
+            </View>
+
+          </View>
         ),
         drawerStyle: {
           backgroundColor: colors.primary,
-          width: 200,
+          width: 210,
         },
         drawerType: 'front',
         drawerLabelStyle: {
           color: colors.text,
-          fontSize: 12,
+          fontSize: 14,
           fontWeight: 'bold',
         },
         drawerContentContainerStyle: {
