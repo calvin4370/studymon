@@ -1,12 +1,7 @@
-<<<<<<< HEAD
 import { View, Text, Image } from 'react-native';
 import React from 'react';
 import icons from '@/constants/icons';
 import colors from '@/constants/colors';
-=======
-import { View, Text } from "react-native";
-import React from "react";
->>>>>>> 93ae8c8757060ffd4a58d90eba98091e1cabf8bd
 
 interface CollectionCountPillProps {
   collectionCount?: number;
