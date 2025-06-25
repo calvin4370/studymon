@@ -4,6 +4,7 @@ import clock from '@/assets/icons/clock.png';
 import gear from '@/assets/icons/gear.png';
 import person from '@/assets/icons/person.png';
 import menu from '@/assets/icons/menu.png';
+import pack from '@/assets/icons/pack.png';
 
 // Faculty Icons
 import arts from '@/assets/icons/arts.png';
@@ -23,6 +24,7 @@ const icons = {
   gear,
   person,
   menu,
+  pack,
 
   // Faculties
   arts,
