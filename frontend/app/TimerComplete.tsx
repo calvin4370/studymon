@@ -8,7 +8,7 @@ import {
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import images from '@/constants/images';
-import functions from '@/constants/helperFunctions';
+import functions from '@/constants/functions';
 import { useAuth } from '@/contexts/AuthContext';
 import { doc, increment, updateDoc } from 'firebase/firestore';
 import { FIREBASE_DATABASE } from '@/firebaseConfig';
@@ -22,7 +22,7 @@ const TimerComplete = () => {
     ? parseInt(params.fullDuration[0], 10)
     : parseInt(params.fullDuration, 10);
   const minutesCompleted = Math.floor(fullDuration / 60);
-  const coinsAwarded = Math.floor(minutesCompleted / 5); // 1 coin for every 5 minutes completed
+  const coinsAwarded = functions.getCoinReward(minutesCompleted);
 
   const handleReturn = () => {
     router.replace('/(tabs)'); // Go back to index.tsx (TimerScreen)
