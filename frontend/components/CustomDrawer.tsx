@@ -4,8 +4,11 @@ import { Drawer } from 'expo-router/drawer';
 import colors from '@/constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 import CoinsPill from './CoinsPill';
+import { FIREBASE_AUTH } from '@/firebaseConfig';
 
 const CustomDrawer = () => {
+  const userId = FIREBASE_AUTH.currentUser?.uid || null;
+
   return (
     <Drawer
       screenOptions={{
@@ -21,10 +24,9 @@ const CustomDrawer = () => {
                 StudyMon
               </Text>
             </View>
-            <View className='justify-end ml-auto' >
-              <CoinsPill />
+            <View className='justify-end ml-auto'>
+              <CoinsPill userId={userId} />
             </View>
-
           </View>
         ),
         drawerStyle: {
