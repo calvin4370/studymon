@@ -1,6 +1,8 @@
-import CollectionCountPill from '@/components/CollectionCountPill';
 import CollectionOverview from '@/components/CollectionOverview';
 import { View, Text } from 'react-native';
+
+// Read Firestore to get user's collection
+const cards = [];
 
 const CollectionScreen = () => {
   return (
