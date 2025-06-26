@@ -8,6 +8,7 @@ import {
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import images from '@/constants/images';
+import helperFunctions from '@/constants/helperFunctions';
 import functions from '@/constants/functions';
 import { useAuth } from '@/contexts/AuthContext';
 import { doc, increment, updateDoc } from 'firebase/firestore';
@@ -59,7 +60,7 @@ const TimerComplete = () => {
         <View className='items-center mt-[20px]'>
           <Text className='text-text text-[22px]'>You focused for</Text>
           <Text className='text-text text-[22px] font-semibold'>
-            {functions.formatTimeAsSentence(fullDuration)}!
+            {helperFunctions.formatTimeAsSentence(fullDuration)}!
           </Text>
         </View>
 
