@@ -42,10 +42,10 @@ const CoinsPill = ({ className = '', userId }: CoinsPillProps) => {
 
   return (
     <View
-      className={`flex-row w-[75px] h-[35px] bg-background border-[3px] items-center justify-center border-text rounded-[20px] px-[18px] py-[7px] ${className}`}
+      className={`flex-row w-[90px] h-[35px] bg-background border-[3px] items-center justify-center border-text rounded-[20px] px-[18px] py-[7px] ${className}`}
     >
       <Image source={icons.coin} className='w-[25px] h-[25px]' />
-      <Text className='text-text font-bold text-[16px]/[17px] ml-[8px]'>
+      <Text className='text-text font-bold text-[16px]/[17px] ml-[7px]'>
         {coins}
       </Text>
     </View>

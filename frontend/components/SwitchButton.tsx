@@ -1,23 +1,26 @@
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, GestureResponderEvent } from 'react-native';
 import React, { useState } from 'react';
 
 interface SwitchButtonProps {
   className?: string;
   active?: boolean;
+  onToggle?: (event: GestureResponderEvent) => void;
 }
 
 const SwitchButton = ({
   className = '',
   active = false,
-}: SwitchButtonProps) => {
+  onToggle = (event) => {}
+} : SwitchButtonProps) => {
   const [isActive, setIsActive] = useState(active);
-  const onButtonPress = () => {
+  const handlePress = (event: GestureResponderEvent) => {
     setIsActive(!isActive);
+    onToggle(event);
   };
   return (
     <TouchableOpacity
-      onPress={onButtonPress}
-      className={`flex-row w-[90px] h-[50px] border-[3px] border-primary rounded-full 
+      onPress={handlePress}
+      className={`flex-row w-[90px] h-[50px] border-[3px] border-primary rounded-full items-center
         ${className} 
         ${isActive ? 'bg-background' : 'bg-text-2'}`}
     >
