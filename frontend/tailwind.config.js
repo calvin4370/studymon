@@ -15,7 +15,11 @@ module.exports = {
           1: '#F0F1F1', // White
           2: '#D9D9D9' // Light Grey
         },
-        primary: '#85DADA', // Light green
+        primary: {
+          DEFAULT: '#85DADA', // Light green
+          1: '#85DADA', // Light green
+          2: '#6BB0B0' // green
+        },
         accent: {
           DEFAULT: '#8586DA',
           1: '#8586DA', // Light purple

@@ -9,7 +9,7 @@ const CollectionScreen = () => {
     <View className='flex-1 bg-background mt-[20px] mx-[20px] rounded-[20px]'>
       <CollectionOverview />
       <View className='items-center border-red-500 border-[2px] mt-[20px]'>
-        <Text className='text-text text-[48px] font-bold'>To Be Done</Text>
+        <Text className='text-text text-[48px] font-bold'>What the helly</Text>
       </View>
     </View>
   );

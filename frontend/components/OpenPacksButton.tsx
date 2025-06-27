@@ -1,11 +1,16 @@
-import { View, Image, Text } from 'react-native';
+import { View, Image, Text, TouchableOpacity, GestureResponderEvent } from 'react-native';
 import React from 'react';
 import icons from '@/constants/icons';
 import colors from '@/constants/colors';
 
-const RoundishSquare = () => {
+interface OpenPacksButtonProps {
+  className?: string;
+  onButtonPress?: (event: GestureResponderEvent) => void | undefined;
+}
+
+const OpenPacksButton = ({className = '', onButtonPress} : OpenPacksButtonProps) => {
   return (
-    <View
+    <TouchableOpacity onPress={onButtonPress}
       className='flex-row w-[120px] h-[63px] bg-background border-[3px] border-primary 
         items-center justify-center rounded-[10px] rounded-tl-[20px] rounded-br-[20px] px-[18px] py-[7px]'
     >
@@ -22,8 +27,8 @@ const RoundishSquare = () => {
           Packs
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
-export default RoundishSquare;
+export default OpenPacksButton;
