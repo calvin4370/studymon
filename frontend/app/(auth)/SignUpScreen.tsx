@@ -16,14 +16,8 @@ import ThemedTextInput from '@/components/ThemedTextInput';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
 import { createUserWithEmailAndPassword, deleteUser } from 'firebase/auth';
 import images from '@/constants/images';
-import {
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-  collection,
-  addDoc,
-} from '@firebase/firestore';
+import { doc, getDoc } from '@firebase/firestore';
+import { initialiseUserDoc } from '@/constants/utils';
 
 const SignUpScreen = () => {
   const insets = useSafeAreaInsets();
@@ -55,14 +49,7 @@ const SignUpScreen = () => {
       const userSnap = await getDoc(userRef);
       if (!userSnap.exists()) {
         // Initialise user document in Firestore user collection
-        await setDoc(userRef, {
-          email: response.user.email,
-          displayName: response.user.displayName || '',
-          totalFocusTime: 0, // in seconds
-          coins: 0,
-          createdAt: serverTimestamp(),
-          lastLogin: serverTimestamp(),
-        });
+        initialiseUserDoc(response); // from @/utils
       } else {
         // account already exists
         await deleteUser(response.user); // deletes for the auth
@@ -70,43 +57,6 @@ const SignUpScreen = () => {
         setLoading(false);
         return;
       }
-
-      // Initialise ownedCards subcollection for user
-      // const ownedCardsCollectionRef = collection(userRef, 'ownedCards');
-      // I want their collection to be empty on account creation, so hold off till they
-      // get their first card
-
-      // Initialise tasks subcollection for user
-      const tasksCollectionRef = collection(userRef, 'tasks');
-      await addDoc(tasksCollectionRef, {
-        title: 'Example Task',
-        description: 'This is a Task',
-        deadline: new Date(2025, 5, 30), // Date's months are 0-indexed, this is 30 June
-        importance: 'low',
-        estimatedDurationMinutes: 60,
-        completed: false,
-        createdAt: serverTimestamp(),
-      });
-
-      // Initialise events subcollection for user
-      const eventsCollectionRef = collection(userRef, 'events');
-      await addDoc(eventsCollectionRef, {
-        title: 'Example Event',
-        description: 'This is an Event',
-        startDate: new Date(), // is a datetime
-        endDate: new Date(Date.now() + 1000 * 60 * 60), // is a datetime
-        travelTimeTo: 0, // time in minutes unavailable while travelling to event destination
-        travelTimeBack: 0, // time in minutes needed to get back to being available
-        source: 'manual', // e.g. manual input / NUSMods integration
-        createdAt: serverTimestamp(),
-      });
-
-      // Initialise friends subcollection for user
-      const friendsCollectionRef = collection(userRef, 'friends');
-      await addDoc(friendsCollectionRef, {
-        friendId: 'Example Friend UID',
-        acceptedAt: serverTimestamp(),
-      });
 
       console.log('Sign up successful:', response);
       alert('Account created! You are now signed in.');

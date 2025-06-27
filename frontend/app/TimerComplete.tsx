@@ -9,7 +9,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import images from '@/constants/images';
 import helperFunctions from '@/constants/helperFunctions';
-import functions from '@/constants/functions';
+import utils from '@/constants/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { doc, increment, updateDoc } from 'firebase/firestore';
 import { FIREBASE_DATABASE } from '@/firebaseConfig';
@@ -23,7 +23,7 @@ const TimerComplete = () => {
     ? parseInt(params.fullDuration[0], 10)
     : parseInt(params.fullDuration, 10);
   const minutesCompleted = Math.floor(fullDuration / 60);
-  const coinsAwarded = functions.getCoinReward(minutesCompleted);
+  const coinsAwarded = utils.getCoinReward(minutesCompleted);
 
   const handleReturn = () => {
     router.replace('/(tabs)'); // Go back to index.tsx (TimerScreen)
