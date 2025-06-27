@@ -60,7 +60,7 @@ const SignUpScreen = () => {
 
       console.log('Sign up successful:', response);
       alert('Account created! You are now signed in.');
-      router.replace('/(tabs)'); // Timer Screen
+      router.replace('/(drawer)/(tabs)'); // Timer Screen
     } catch (error: any) {
       console.error('Sign up error:', error);
       alert('Sign up failed: ' + error.message);

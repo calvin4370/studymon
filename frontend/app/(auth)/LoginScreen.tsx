@@ -50,7 +50,7 @@ const LoginScreen = () => {
       // Update database to add new fields from updates etc.
       updateUserDocForLogin(response);
 
-      router.replace('/(tabs)');
+      router.replace('/(drawer)/(tabs)');
       alert('Login successful!');
     } catch (error: any) {
       console.error('Login failed:', error);
