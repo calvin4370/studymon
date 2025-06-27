@@ -16,6 +16,7 @@ import ThemedTextInput from '@/components/ThemedTextInput';
 import images from '@/constants/images';
 import { FIREBASE_AUTH } from '@/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { updateUserDocForLogin } from '@/constants/utils';
 
 const LoginScreen = () => {
   // Calculate the usable width inside the safe area
@@ -45,6 +46,10 @@ const LoginScreen = () => {
         passwordInput
       );
       console.log('Login successful:', response);
+
+      // Update database to add new fields from updates etc.
+      updateUserDocForLogin(response);
+
       router.replace('/(tabs)');
       alert('Login successful!');
     } catch (error: any) {
