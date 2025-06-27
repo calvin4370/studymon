@@ -20,7 +20,7 @@ const CustomDrawer = () => {
         headerTitle: () => (
           <View className='flex-row items-center w-full h-full'>
             <View className='flex-1 items-center'>
-              <Text className='text-text text-[25px] font-extrabold'>
+              <Text className='text-text text-[25px] font-extrabold pl-10'>
                 StudyMon
               </Text>
             </View>

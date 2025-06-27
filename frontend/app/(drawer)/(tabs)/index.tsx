@@ -44,7 +44,7 @@ export default function Index() {
   };
 
   return (
-    <View className="flex-1 bg-background items-center">
+    <View className="flex-1 bg-background items-center pt-6">
       <StatusBar style="dark" />
 
       {/* Main Content */}
