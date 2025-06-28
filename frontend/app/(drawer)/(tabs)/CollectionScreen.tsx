@@ -1,14 +1,28 @@
 import CollectionOverview from '@/components/CollectionOverview';
+import { useRouter } from 'expo-router';
 import { View, Text, ScrollView } from 'react-native';
 
-// Read Firestore to get user's collection
-const cards = [];
-const collectionCount = cards.length;
+
 
 const CollectionScreen = () => {
+  const router = useRouter();
+
+  // Function definitions for Buttons
+  const onOpenPacksButtonPress = () => {
+    router.push('/CollectionScreen');
+  };
+
+  const onBuyPacksButtonPress = () => {
+    router.push('/(drawer)/StoreScreen');
+  };
+
+  // Read Firestore to get user's collection
+  const cards = [];
+  const collectionCount = cards.length;
+
   return (
     <ScrollView className='bg-background mt-[20px] mx-[20px]'>
-      <CollectionOverview className='mb-[20px]' />
+      <CollectionOverview className='mb-[20px]' onOpenPacksButtonPress={onOpenPacksButtonPress} onBuyPacksButtonPress={onBuyPacksButtonPress} />
       
       {/* Show collection under overview */}
       {(collectionCount > 0) ? (

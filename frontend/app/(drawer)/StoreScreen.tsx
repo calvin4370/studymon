@@ -84,6 +84,7 @@ export default function StoreScreen() {
           ))}
         </ScrollView>
       </View>
+      
       {/* Buy button */}
       <View className="flex-none py-2">
         <TouchableOpacity
