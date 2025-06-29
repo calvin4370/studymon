@@ -106,7 +106,39 @@ const CollectionScreen = () => {
       {viewState === 'collectionOnly' ? (
         ownedCards.length > 0 ? (
           // collectionOnly view and user has at least 1 card to show
-          <></>
+          <View>
+            <Text className='text-text font-bold text-[30px] mb-[20px]'>
+              Collection
+            </Text>
+            <FlatList
+              className='pb-[50px]'
+              data={ownedCards}
+              renderItem={({ item }) => {
+                const imageSource = cardArtMap[`assets/cards/${item.cardNum}.png`]; // Only works for BASE set for now, add ${item.setCode} later
+                return (
+                  <View className='overflow-hidden'>
+                    {/* Update to be a ownedCollectionCard component */}
+                    <Image
+                      source={imageSource}
+                      className='w-[126px] h-[176px]'
+                      width={126}
+                      height={176}
+                      resizeMode='cover'
+                    />
+                  </View>
+                );
+              }}
+              keyExtractor={(item) => item.cardNum.toString()}
+              numColumns={3}
+              columnWrapperStyle={{
+                justifyContent: 'flex-start',
+                gap: 11,
+                paddingRight: 5,
+                marginBottom: 10,
+              }}
+              scrollEnabled={false} // handled by the outer ScrollView
+            />
+          </View>
         ) : (
           // collectionOnly view and but user has an empty collection
           <View className='flex-1 justify-center items-center mt-[180px]'>
