@@ -133,8 +133,7 @@ const CollectionScreen = () => {
               columnWrapperStyle={{
                 justifyContent: 'flex-start',
                 gap: 11,
-                paddingRight: 5,
-                marginBottom: 10,
+                marginBottom: 11,
               }}
               scrollEnabled={false} // handled by the outer ScrollView
             />
@@ -179,8 +178,7 @@ const CollectionScreen = () => {
             columnWrapperStyle={{
               justifyContent: 'flex-start',
               gap: 11,
-              paddingRight: 5,
-              marginBottom: 10,
+              marginBottom: 11,
             }}
             scrollEnabled={false}
           />
