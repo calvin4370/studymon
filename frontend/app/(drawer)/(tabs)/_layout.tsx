@@ -93,6 +93,7 @@ const _layout = () => {
           }}
         />
       </Tabs>
+      
     </SafeAreaView>
   );
 };

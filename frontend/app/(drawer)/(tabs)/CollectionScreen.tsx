@@ -71,7 +71,7 @@ const CollectionScreen = () => {
 
   // Function definitions for Buttons
   const handleOpenPacksButtonPress = () => {
-    router.push('/CollectionScreen');
+    router.push('/(drawer)/PackOpeningScreen');
   };
 
   const handleBuyPacksButtonPress = () => {

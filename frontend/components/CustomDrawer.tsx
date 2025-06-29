@@ -1,10 +1,11 @@
-import { Text, View } from "react-native";
+import { Text, View, Image } from "react-native";
 import React from "react";
 import { Drawer } from "expo-router/drawer";
 import colors from "@/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import CoinsPill from "./CoinsPill";
 import { FIREBASE_AUTH } from "@/firebaseConfig";
+import icons from "@/constants/icons";
 
 const CustomDrawer = () => {
   const userId = FIREBASE_AUTH.currentUser?.uid || null;
@@ -50,6 +51,15 @@ const CustomDrawer = () => {
           title: "Home",
           drawerIcon: () => (
             <Ionicons name="home" size={24} color={colors.text} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="PackOpeningScreen"
+        options={{
+          title: "Open Packs",
+          drawerIcon: () => (
+            <Image source={icons.cards} className='w-[24px] h-[24px]' tintColor={colors.text} width={24} height={24}/>
           ),
         }}
       />
