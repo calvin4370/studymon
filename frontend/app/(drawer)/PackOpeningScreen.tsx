@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
 import NumOwnedPill from '@/components/NumOwnedPill';
-import PackCard from './PackCard';
+import PackCard from '../../components/PackCard';
 
 const PackOpeningScreen = () => {
   // States
@@ -46,8 +46,8 @@ const PackOpeningScreen = () => {
   // Function definitions for Buttons
 
   return (
-    <View className='p-[20px] '>
-      <View>
+    <View className='flex-1 bg-background-1 p-[20px]'>
+      <View className='bg-background-1'>
         <Text className='text-text font-bold text-[30px] mb-[20px]'>
           Your Packs ({ownedPacks.length} owned)
         </Text>
