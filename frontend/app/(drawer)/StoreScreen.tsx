@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
-import { PACK_SIZES, SUBJECT_PACKS } from "@/constants/packs";
+import { PACK_SIZES, FACULTY_PACKS } from "@/constants/packs";
 import icons from "@/constants/icons";
 
 export default function StoreScreen() {
@@ -56,10 +56,10 @@ export default function StoreScreen() {
       {/* Subject Packs */}
       <View className="flex-1">
         <Text className="text-[26px] font-extrabold text-text mb-3">
-          Subject Packs
+          Faculty Packs
         </Text>
         <ScrollView className="flex-1">
-          {SUBJECT_PACKS.map((pack) => (
+          {FACULTY_PACKS.map((pack) => (
             <TouchableOpacity
               key={pack.id}
               onPress={() => setSelectedPack(pack.id)}

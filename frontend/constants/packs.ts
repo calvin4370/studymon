@@ -19,25 +19,45 @@ export const PACK_SIZES = [
   },
 ];
 
-export const SUBJECT_PACKS = [
+export const FACULTY_PACKS = [
   {
-    id: 'history',
-    name: 'History Pack',
-    price: 150,
-  },
-  {
-    id: 'math',
-    name: 'Math Pack',
-    price: 150,
-  },
-  {
-    id: 'psychology',
-    name: 'Psychology Pack',
+    id: 'arts',
+    name: 'Arts Pack',
     price: 150,
   },
   {
     id: 'science',
     name: 'Science Pack',
+    price: 150,
+  },
+  {
+    id: 'engineering',
+    name: 'Engineering Pack',
+    price: 150,
+  },
+  {
+    id: 'business',
+    name: 'Business Pack',
+    price: 150,
+  },
+  {
+    id: 'computing',
+    name: 'Computing Pack',
+    price: 150,
+  },
+  {
+    id: 'law',
+    name: 'Law Pack',
+    price: 150,
+  },
+  {
+    id: 'healthcare',
+    name: 'Healthcare Pack',
+    price: 150,
+  },
+  {
+    id: 'music',
+    name: 'Mbut abt 12.1usic Pack',
     price: 150,
   },
 ];
