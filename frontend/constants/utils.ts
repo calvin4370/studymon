@@ -6,9 +6,12 @@ import {
   DocumentData,
   DocumentReference,
   getDoc,
+  getDocs,
+  query,
   serverTimestamp,
   setDoc,
   updateDoc,
+  where,
 } from 'firebase/firestore';
 import { UserCredential } from 'firebase/auth';
 
@@ -22,6 +25,7 @@ export const initialiseUserDoc = async (response: UserCredential) => {
   await setDoc(userDocRef, {
     email: response.user.email,
     displayName: response.user.displayName || '',
+    profilePic: '',
     totalFocusTime: 0, // in seconds
     coins: 0,
     createdAt: serverTimestamp(),
@@ -223,6 +227,32 @@ async function addFriend({
   });
 }
 
+async function addFriendByEmail({
+  userDocRef,
+  friendEmail,
+}: {
+  userDocRef: DocumentReference<DocumentData, DocumentData>;
+  friendEmail: string;
+}) {
+  // Query firestore for user with this email
+  const usersRef = collection(FIREBASE_DATABASE, 'users');
+  const q = query(usersRef, where('email', '==', friendEmail));
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+    return { success: false, message: 'No user found with that email.' };
+  }
+
+  // Get friend's UID, first matching document
+  const friendDoc = querySnapshot.docs[0];
+  const friendId = friendDoc.id;
+
+  // Add friend by UID
+  await addFriend({ userDocRef, friendId });
+
+  return { success: true };
+}
+
 const utils = {
   initialiseUserDoc,
   updateUserDocForLogin,
@@ -230,6 +260,7 @@ const utils = {
   addTask,
   addEvent,
   addFriend,
+  addFriendByEmail,
 };
 
 export default utils;
