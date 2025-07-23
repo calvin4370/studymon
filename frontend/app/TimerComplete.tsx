@@ -32,7 +32,7 @@ const TimerComplete = () => {
   // useEffect waits for the user to be defined before executing the function
   useEffect(() => {
     const awardCoins = async () => {
-      if (user && coinsAwarded > 0) {
+      if (user && coinsAwarded >= 0) {
         // must be inside here to ensure user is defined
         const userRef = doc(FIREBASE_DATABASE, 'users', user?.uid || ''); // get a reference to the user's document in Firestore
         // Update user's coins and duration in Firestore
