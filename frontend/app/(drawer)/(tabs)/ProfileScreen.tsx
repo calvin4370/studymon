@@ -82,7 +82,7 @@ const ProfileScreen = () => {
     if (userId && usernameInput.trim()) {
       const userRef = doc(FIREBASE_DATABASE, 'users', userId);
       await updateDoc(userRef, {
-        username: usernameInput.trim()
+        displayName: usernameInput.trim()
       });
       setUsername(usernameInput.trim());
     }
