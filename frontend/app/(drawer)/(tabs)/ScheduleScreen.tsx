@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import { Task } from "@/constants/interfaces";
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
-type Task = {
-  day: string;
-  title: string;
-  description: string;
-  // deadline removed
-};
 
 const ScheduleScreen = () => {
   const [tasks, setTasks] = useState<Task[]>([]);

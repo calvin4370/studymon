@@ -3,6 +3,8 @@ import {
   addDoc,
   collection,
   doc,
+  DocumentData,
+  DocumentReference,
   getDoc,
   serverTimestamp,
   setDoc,
@@ -32,20 +34,19 @@ export const initialiseUserDoc = async (response: UserCredential) => {
   // get their first card
 
   // Initialise tasks subcollection for user
-  const tasksCollectionRef = collection(userDocRef, 'tasks');
-  await addDoc(tasksCollectionRef, {
+  await addTask({
+    userDocRef: userDocRef,
     title: 'Example Task',
     description: 'This is a Task',
     deadline: new Date(2025, 5, 30), // Date's months are 0-indexed, this is 30 June
     importance: 'low',
     estimatedDurationMinutes: 60,
     completed: false,
-    createdAt: serverTimestamp(),
   });
 
   // Initialise events subcollection for user
-  const eventsCollectionRef = collection(userDocRef, 'events');
-  await addDoc(eventsCollectionRef, {
+  await addEvent({
+    userDocRef: userDocRef,
     title: 'Example Event',
     description: 'This is an Event',
     startDate: new Date(), // is a datetime
@@ -53,15 +54,10 @@ export const initialiseUserDoc = async (response: UserCredential) => {
     travelTimeTo: 0, // time in minutes unavailable while travelling to event destination
     travelTimeBack: 0, // time in minutes needed to get back to being available
     source: 'manual', // e.g. manual input / NUSMods integration
-    createdAt: serverTimestamp(),
   });
 
   // Initialise friends subcollection for user
-  const friendsCollectionRef = collection(userDocRef, 'friends');
-  await addDoc(friendsCollectionRef, {
-    friendId: 'Example Friend UID',
-    acceptedAt: serverTimestamp(),
-  });
+  await addFriend({ userDocRef: userDocRef, friendId: 'Example Friend ID' });
 };
 
 export const updateUserDocForLogin = async (response: UserCredential) => {
@@ -152,9 +148,88 @@ export const getCoinReward = (minutes: number) => {
   return coinsGiven;
 };
 
+async function addTask({
+  userDocRef,
+  title,
+  description,
+  deadline, // Date's months are 0-indexed
+  importance,
+  estimatedDurationMinutes,
+  completed = false,
+}: {
+  userDocRef: DocumentReference<DocumentData, DocumentData>;
+  title: string;
+  description: string;
+  deadline: Date; // Date's months are 0-indexed
+  importance: 'low' | 'medium' | 'high';
+  estimatedDurationMinutes: number;
+  completed?: boolean;
+}) {
+  const tasksCollectionRef = collection(userDocRef, 'tasks');
+  await addDoc(tasksCollectionRef, {
+    title: title,
+    description: description,
+    deadline: deadline,
+    importance: importance,
+    estimatedDurationMinutes: estimatedDurationMinutes,
+    completed: completed,
+  });
+}
+
+async function addEvent({
+  userDocRef,
+  title,
+  description,
+  startDate,
+  endDate,
+  travelTimeTo = 0,
+  travelTimeBack = 0,
+  source = 'manual',
+}: {
+  userDocRef: DocumentReference<DocumentData, DocumentData>;
+  title: string;
+  description: string;
+  startDate: Date; // is a datetime
+  endDate: Date; // is a datetime
+  travelTimeTo?: number; // time in minutes unavailable while travelling to event destination
+  travelTimeBack?: number; // time in minutes needed to get back to being available
+  source?: 'manual' | 'NUSMods'; // e.g. manual input / NUSMods integration
+}) {
+  const eventsCollectionRef = collection(userDocRef, 'events');
+  await addDoc(eventsCollectionRef, {
+    title: title,
+    description: description,
+    startDate: startDate, // is a datetime
+    endDate: endDate, // is a datetime
+    travelTimeTo: travelTimeTo, // time in minutes unavailable while travelling to event destination
+    travelTimeBack: travelTimeBack, // time in minutes needed to get back to being available
+    source: source, // e.g. manual input / NUSMods integration
+    createdAt: serverTimestamp(),
+  });
+  console.log(`Event ${title} added`);
+}
+
+async function addFriend({
+  userDocRef,
+  friendId,
+}: {
+  userDocRef: DocumentReference<DocumentData, DocumentData>;
+  friendId: string;
+}) {
+  const friendsCollectionRef = collection(userDocRef, 'friends');
+  await addDoc(friendsCollectionRef, {
+    friendId: friendId,
+    acceptedAt: serverTimestamp(),
+  });
+}
+
 const utils = {
+  initialiseUserDoc,
   updateUserDocForLogin,
   getCoinReward,
+  addTask,
+  addEvent,
+  addFriend,
 };
 
 export default utils;

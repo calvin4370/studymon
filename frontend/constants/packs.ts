@@ -57,7 +57,7 @@ export const FACULTY_PACKS = [
   },
   {
     id: 'music',
-    name: 'Mbut abt 12.1usic Pack',
+    name: 'Music Pack',
     price: 150,
   },
 ];
