@@ -4,13 +4,13 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  Dimensions,
+  Dimensions, Keyboard, TextInput,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Avatar from '@/components/Avatar';
 import images from '@/constants/images';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import {collection, doc, getDoc, getDocs, updateDoc} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import helperFunctions from '@/constants/helperFunctions';
 
@@ -26,6 +26,9 @@ const ProfileScreen = () => {
   const [username, setUsername] = useState('Username');
   const [email, setEmail] = useState('Email');
   const [collectionCount, setCollectionCount] = useState(0);
+  // for changing username
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [usernameInput, setUsernameInput] = useState(username);
 
   // Fetch user data to get Basic User Stats
   useEffect(() => {
@@ -68,7 +71,26 @@ const ProfileScreen = () => {
     fetchUserData();
   }, []); // Dependency array empty so that this only runs once when component mounts
 
-  // Function Definitions for Buttons
+  // handling username change
+  const handleUsernamePress = () => {
+    setUsernameInput(username);
+    setIsEditingUsername(true);
+  }
+
+  const handleUsernameSubmit = async () => {
+    const userId = FIREBASE_AUTH.currentUser?.uid;
+    if (userId && usernameInput.trim()) {
+      const userRef = doc(FIREBASE_DATABASE, 'users', userId);
+      await updateDoc(userRef, {
+        username: usernameInput.trim()
+      });
+      setUsername(usernameInput.trim());
+    }
+    setIsEditingUsername(false);
+    Keyboard.dismiss();
+  }
+
+  // handling statistics press
   const handleStatisticsPress = () => {
     alert("This will link to the User's statistics page");
   };
@@ -85,7 +107,7 @@ const ProfileScreen = () => {
         }}
       >
         {/* Profile Avatar */}
-        <View className='mt-[50px]'>
+        <View className='mt-[50px] items-center'>
           <TouchableOpacity
             onPress={() =>
               alert('This will allow User to change their profile picture')
@@ -95,9 +117,26 @@ const ProfileScreen = () => {
             <Avatar source={images.timerActive} />
           </TouchableOpacity>
           <Text className='text-text text-[32px] font-bold self-center mt-[16px]'>
-            {username}
+            {
+              isEditingUsername ? (
+                <TextInput
+                  value={usernameInput}
+                  onChangeText={setUsernameInput}
+                  onBlur={handleUsernameSubmit}
+                  onSubmitEditing={handleUsernameSubmit}
+                  autoFocus
+                  className='text-text text-[32px] font-bold self-center mt-[16px] bg-white rounded px-2 w-[250px] h-[48px] text-center'
+                />
+              ) : (
+                <TouchableOpacity onPress={handleUsernamePress} activeOpacity={0.85}>
+                  <Text className='text-text text-[32px] font-bold self-center mb-[8px] mt-[4px]'>
+                    {username}
+                  </Text>
+                </TouchableOpacity>
+              )
+            }
           </Text>
-          <Text className='text-text text-[20px] font-medium self-center'>
+          <Text className='text-text text-[20px] font-normal self-center'>
             {email}
           </Text>
         </View>
