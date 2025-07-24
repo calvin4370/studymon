@@ -8,7 +8,11 @@ interface AvatarProps {
 const Avatar = ({ source }: AvatarProps) => {
   return (
     <View>
-      <Image source={source} className="" />
+      <Image
+        source={source}
+        className="w-[210px] h-[210px] rounded-full border-4 border-[#226B7A]"
+        resizeMode={"cover"}
+      />
     </View>
   );
 };

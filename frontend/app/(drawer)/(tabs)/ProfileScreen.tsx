@@ -4,7 +4,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  Dimensions, Keyboard, TextInput,
+  Dimensions, Keyboard, TextInput, Alert
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Avatar from '@/components/Avatar';
@@ -13,6 +13,7 @@ import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
 import {collection, doc, getDoc, getDocs, updateDoc} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import helperFunctions from '@/constants/helperFunctions';
+import utils from "@/constants/utils";
 
 const ProfileScreen = () => {
   // Calculate safe area to adjust widths around
@@ -26,6 +27,7 @@ const ProfileScreen = () => {
   const [username, setUsername] = useState('Username');
   const [email, setEmail] = useState('Email');
   const [collectionCount, setCollectionCount] = useState(0);
+  const [profilePic, setProfilePic] = useState('');
   // for changing username
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [usernameInput, setUsernameInput] = useState(username);
@@ -45,8 +47,9 @@ const ProfileScreen = () => {
 
             // Update state for user document fields
             setTotalFocusSeconds(userData.totalFocusTime);
-            setUsername(userData.username || 'No Username');
+            setUsername(userData.displayName || 'No Username');
             setEmail(userData.email || 'No Email');
+            setProfilePic(userData.profilePic || '');
           }
 
           // Access user subcollections to get more basic statistics
@@ -71,10 +74,22 @@ const ProfileScreen = () => {
     fetchUserData();
   }, []); // Dependency array empty so that this only runs once when component mounts
 
+  // hnadling profile picture change
+  const handleProfilePicPress = async () => {
+    const result = await utils.uploadProfilePic();
+    console.log('Profile picture upload result:', result);
+    if (result.success) {
+      setProfilePic(result.url);
+      Alert.alert('Profile picture updated successfully!');
+    } else {
+      Alert.alert(result.message || 'Failed to update profile picture.');
+    }
+  }
+
   // handling username change
   const handleUsernamePress = () => {
     setUsernameInput(username);
-    setIsEditingUsername(true);
+    setIsEditingUsername(true); // for the modal to show
   }
 
   const handleUsernameSubmit = async () => {
@@ -107,14 +122,12 @@ const ProfileScreen = () => {
         }}
       >
         {/* Profile Avatar */}
-        <View className='mt-[50px] items-center'>
+        <View className='mt-[35px] items-center'>
           <TouchableOpacity
-            onPress={() =>
-              alert('This will allow User to change their profile picture')
-            }
+            onPress={handleProfilePicPress}
             activeOpacity={0.85}
           >
-            <Avatar source={images.timerActive} />
+            <Avatar source={profilePic ? { uri: profilePic } : images.timerActive} />
           </TouchableOpacity>
           <Text className='text-text text-[32px] font-bold self-center mt-[16px]'>
             {

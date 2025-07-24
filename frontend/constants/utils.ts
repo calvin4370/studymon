@@ -1,4 +1,5 @@
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_DATABASE, FIREBASE_STORAGE } from '@/firebaseConfig';
+import * as ImagePicker from 'expo-image-picker';
 import {
   addDoc,
   collection,
@@ -14,8 +15,8 @@ import {
   where,
 } from 'firebase/firestore';
 import { UserCredential } from 'firebase/auth';
-
 import values from './values';
+import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 
 // Functions with important functionality which should be in Firebase Cloud Functions
 export const initialiseUserDoc = async (response: UserCredential) => {
@@ -115,6 +116,42 @@ export const updateUserDocForLogin = async (response: UserCredential) => {
     console.log('Initialised user document for user: ', userId);
   }
 };
+
+// Select and upload profile picture
+export const uploadProfilePic = async () => {
+  // Picking image
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 1,
+  });
+
+  if (result.canceled) return { success: false, message: 'Image selection cancelled' };
+
+  // Convert image to blob for upload
+  const uri = result.assets[0].uri;
+  const response = await fetch(uri);
+  const blob = await response.blob();
+
+  // Upload to Firebase Storage
+  const userId = FIREBASE_AUTH.currentUser?.uid;
+  if (!userId) return { success: false, message: 'User not authenticated.' };
+
+  const storageRef = ref(FIREBASE_STORAGE, `profilePics/${userId}.jpg`);
+  await uploadBytes(storageRef, blob);
+
+  // Get the download URL
+  const downloadURL = await getDownloadURL(storageRef);
+
+  // Update user document with profile picture URL
+  const userDocRef = doc(FIREBASE_DATABASE, 'users', userId);
+  await updateDoc(userDocRef, {
+    profilePic: downloadURL,
+  });
+
+  return { success: true, message: 'Profile picture uploaded successfully.', url: downloadURL };
+}
 
 export const getCoinReward = (minutes: number) => {
   let coinsGiven = 0;
@@ -257,6 +294,7 @@ const utils = {
   initialiseUserDoc,
   updateUserDocForLogin,
   getCoinReward,
+  uploadProfilePic,
   addTask,
   addEvent,
   addFriend,
