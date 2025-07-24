@@ -138,7 +138,7 @@ export const uploadProfilePic = async () => {
   const userId = FIREBASE_AUTH.currentUser?.uid;
   if (!userId) return { success: false, message: 'User not authenticated.' };
 
-  const storageRef = ref(FIREBASE_STORAGE, `profilePics/${userId}.jpg`);
+  const storageRef = ref(FIREBASE_STORAGE, `profilePics/${userId}/profile.jpg`);
   await uploadBytes(storageRef, blob);
 
   // Get the download URL
