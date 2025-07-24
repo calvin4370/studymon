@@ -13,7 +13,7 @@ import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
 import {collection, doc, getDoc, getDocs, updateDoc} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import helperFunctions from '@/constants/helperFunctions';
-import utils from "@/constants/utils";
+import { uploadProfilePic } from "@/constants/utils";
 
 const ProfileScreen = () => {
   // Calculate safe area to adjust widths around
@@ -76,7 +76,7 @@ const ProfileScreen = () => {
 
   // hnadling profile picture change
   const handleProfilePicPress = async () => {
-    const result = await utils.uploadProfilePic();
+    const result = await uploadProfilePic();
     console.log('Profile picture upload result:', result);
     if (result.success) {
       setProfilePic(result.url);
@@ -127,9 +127,8 @@ const ProfileScreen = () => {
             onPress={handleProfilePicPress}
             activeOpacity={0.85}
           >
-            <Avatar source={profilePic ? { uri: profilePic } : images.timerActive} />
+            <Avatar source={profilePic ? { uri: profilePic } : images.timerActive} size={210} />
           </TouchableOpacity>
-          <Text className='text-text text-[32px] font-bold self-center mt-[16px]'>
             {
               isEditingUsername ? (
                 <TextInput
@@ -138,17 +137,16 @@ const ProfileScreen = () => {
                   onBlur={handleUsernameSubmit}
                   onSubmitEditing={handleUsernameSubmit}
                   autoFocus
-                  className='text-text text-[32px] font-bold self-center mt-[16px] bg-white rounded px-2 w-[250px] h-[48px] text-center'
+                  className='text-text text-[32px] font-bold self-center mt-[12px] mb-[4px] bg-white rounded px-2 w-[250px] h-[48px] text-center'
                 />
               ) : (
                 <TouchableOpacity onPress={handleUsernamePress} activeOpacity={0.85}>
-                  <Text className='text-text text-[32px] font-bold self-center mb-[8px] mt-[4px]'>
+                  <Text className='text-text text-[32px] font-bold self-center mt-[12px] mb-[4px]'>
                     {username}
                   </Text>
                 </TouchableOpacity>
               )
             }
-          </Text>
           <Text className='text-text text-[20px] font-normal self-center'>
             {email}
           </Text>

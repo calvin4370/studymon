@@ -1,10 +1,11 @@
-import {View, Image, Text, TouchableOpacity, FlatList, Alert, Modal, TextInput} from "react-native";
+import {View, Text, TouchableOpacity, FlatList, Alert, Modal, TextInput} from "react-native";
 import React, {useEffect, useState} from "react";
 import {useAuth} from "@/contexts/AuthContext";
 import {FIREBASE_DATABASE} from "@/firebaseConfig";
 import {collection, getDocs, doc, getDoc} from "firebase/firestore";
 import utils from "@/constants/utils";
 import images from "@/constants/images";
+import Avatar from "@/components/Avatar";
 
 const FriendsScreen = () => {
   const { user } = useAuth();
@@ -68,35 +69,6 @@ const FriendsScreen = () => {
     }
   };
 
-  // Avatar component
-  const Avatar = ({ profilePic }: { profilePic: string }) => (
-  profilePic ? (
-    <Image
-      source={{ uri: profilePic }}
-      style={{
-        width: 70,
-        height: 70,
-        borderRadius: 35,
-        marginRight: 16,
-        borderWidth: 4,
-        borderColor: "#226B7A",
-      }}
-    />
-  ) : (
-    <Image
-      source={images.timerActive}
-      style={{
-        width: 70,
-        height: 70,
-        borderRadius: 35,
-        marginRight: 16,
-        borderWidth: 4,
-        borderColor: "#226B7A",
-      }}
-    />
-  )
-)
-
   return (
     <View className="flex-1 bg-[#E6FCFF] pt-10">
       {/* Header */}
@@ -116,8 +88,8 @@ const FriendsScreen = () => {
         renderItem={({ item }) => (
           <View>
             <View className="flex-row items-center px-6 py-4">
-              <Avatar />
-              <View>
+              <Avatar source={item.profilePic ? { uri: item.profilePic } : images.timerActive} size={70} />
+              <View className={"ml-3"}>
                 <Text className="text-[28px] font-extrabold text-[#222]">{item.displayName}</Text>
                 <Text className="text-[20px] text-[#222] mt-1">{item.totalFocusTime / 60} minutes</Text>
               </View>
