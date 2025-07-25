@@ -331,6 +331,7 @@ const utils = {
   addEvent,
   addFriend,
   addFriendByEmail,
+  removeFriend,
 };
 
 export default utils;
