@@ -1,8 +1,13 @@
-import { FIREBASE_AUTH, FIREBASE_DATABASE, FIREBASE_STORAGE } from '@/firebaseConfig';
-import * as ImagePicker from 'expo-image-picker';
+import {
+  FIREBASE_AUTH,
+  FIREBASE_DATABASE,
+  FIREBASE_STORAGE,
+} from "@/firebaseConfig";
+import * as ImagePicker from "expo-image-picker";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   DocumentData,
   DocumentReference,
@@ -13,20 +18,20 @@ import {
   setDoc,
   updateDoc,
   where,
-} from 'firebase/firestore';
-import { UserCredential } from 'firebase/auth';
-import values from './values';
-import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
+} from "firebase/firestore";
+import { UserCredential } from "firebase/auth";
+import values from "./values";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 // Functions with important functionality which should be in Firebase Cloud Functions
 export const initialiseUserDoc = async (response: UserCredential) => {
   // Initialise user document in Firestore user collection
-  const userId = FIREBASE_AUTH.currentUser?.uid || '';
-  const userDocRef = doc(FIREBASE_DATABASE, 'users', userId);
+  const userId = FIREBASE_AUTH.currentUser?.uid || "";
+  const userDocRef = doc(FIREBASE_DATABASE, "users", userId);
   await setDoc(userDocRef, {
     email: response.user.email,
-    displayName: response.user.displayName || '',
-    profilePic: '',
+    displayName: response.user.displayName || "",
+    profilePic: "",
     totalFocusTime: 0, // in seconds
     coins: 0,
     createdAt: serverTimestamp(),
@@ -41,10 +46,10 @@ export const initialiseUserDoc = async (response: UserCredential) => {
   // Initialise tasks subcollection for user
   await addTask({
     userDocRef: userDocRef,
-    title: 'Example Task',
-    description: 'This is a Task',
+    title: "Example Task",
+    description: "This is a Task",
     deadline: new Date(2025, 5, 30), // Date's months are 0-indexed, this is 30 June
-    importance: 'low',
+    importance: "low",
     estimatedDurationMinutes: 60,
     completed: false,
   });
@@ -52,57 +57,57 @@ export const initialiseUserDoc = async (response: UserCredential) => {
   // Initialise events subcollection for user
   await addEvent({
     userDocRef: userDocRef,
-    title: 'Example Event',
-    description: 'This is an Event',
+    title: "Example Event",
+    description: "This is an Event",
     startDate: new Date(), // is a datetime
     endDate: new Date(Date.now() + 1000 * 60 * 60), // is a datetime
     travelTimeTo: 0, // time in minutes unavailable while travelling to event destination
     travelTimeBack: 0, // time in minutes needed to get back to being available
-    source: 'manual', // e.g. manual input / NUSMods integration
+    source: "manual", // e.g. manual input / NUSMods integration
   });
 
   // Initialise friends subcollection for user
-  await addFriend({ userDocRef: userDocRef, friendId: 'Example Friend ID' });
+  await addFriend({ userDocRef: userDocRef, friendId: "Example Friend ID" });
 };
 
 export const updateUserDocForLogin = async (response: UserCredential) => {
-  const userId = FIREBASE_AUTH.currentUser?.uid || '';
-  const userDocRef = doc(FIREBASE_DATABASE, 'users', userId);
+  const userId = FIREBASE_AUTH.currentUser?.uid || "";
+  const userDocRef = doc(FIREBASE_DATABASE, "users", userId);
   const userSnap = await getDoc(userDocRef);
 
   if (userSnap.exists()) {
     const userData = userSnap.data();
 
     // Ensure coins field is present
-    if (userData && typeof userData.coins === 'undefined') {
+    if (userData && typeof userData.coins === "undefined") {
       await updateDoc(userDocRef, {
         coins: 0, // Initialise as 0
       });
-      console.log('coins field in current user document added');
+      console.log("coins field in current user document added");
     }
 
     // Ensure createdAt field is present
-    if (userData && typeof userData.createdAt === 'undefined') {
+    if (userData && typeof userData.createdAt === "undefined") {
       await updateDoc(userDocRef, {
         createdAt: serverTimestamp(),
       });
-      console.log('createdAt field in current user document added');
+      console.log("createdAt field in current user document added");
     }
 
     // Ensure email field is present
-    if (userData && typeof userData.email === 'undefined') {
+    if (userData && typeof userData.email === "undefined") {
       await updateDoc(userDocRef, {
         email: FIREBASE_AUTH.currentUser?.email,
       });
-      console.log('email field in current user document added');
+      console.log("email field in current user document added");
     }
 
     // Ensure totalFocusTime (in minutes) field is present
-    if (userData && typeof userData.totalFocusTime === 'undefined') {
+    if (userData && typeof userData.totalFocusTime === "undefined") {
       await updateDoc(userDocRef, {
         totalFocusTime: 0, // Initialise as 0 min
       });
-      console.log('email field in current user document added');
+      console.log("email field in current user document added");
     }
 
     // Also just update other markings
@@ -111,9 +116,9 @@ export const updateUserDocForLogin = async (response: UserCredential) => {
     });
   } else {
     // user document not found in database -> old user from before Firestore was connected
-    console.log('Login Issue: user document does not exist: ', userId);
+    console.log("Login Issue: user document does not exist: ", userId);
     initialiseUserDoc(response);
-    console.log('Initialised user document for user: ', userId);
+    console.log("Initialised user document for user: ", userId);
   }
 };
 
@@ -127,7 +132,8 @@ export const uploadProfilePic = async () => {
     quality: 1,
   });
 
-  if (result.canceled) return { success: false, message: 'Image selection cancelled' };
+  if (result.canceled)
+    return { success: false, message: "Image selection cancelled" };
 
   // Convert image to blob for upload
   const uri = result.assets[0].uri;
@@ -136,7 +142,7 @@ export const uploadProfilePic = async () => {
 
   // Upload to Firebase Storage
   const userId = FIREBASE_AUTH.currentUser?.uid;
-  if (!userId) return { success: false, message: 'User not authenticated.' };
+  if (!userId) return { success: false, message: "User not authenticated." };
 
   const storageRef = ref(FIREBASE_STORAGE, `profilePics/${userId}/profile.jpg`);
   await uploadBytes(storageRef, blob);
@@ -145,13 +151,17 @@ export const uploadProfilePic = async () => {
   const downloadURL = await getDownloadURL(storageRef);
 
   // Update user document with profile picture URL
-  const userDocRef = doc(FIREBASE_DATABASE, 'users', userId);
+  const userDocRef = doc(FIREBASE_DATABASE, "users", userId);
   await updateDoc(userDocRef, {
     profilePic: downloadURL,
   });
 
-  return { success: true, message: 'Profile picture uploaded successfully.', url: downloadURL };
-}
+  return {
+    success: true,
+    message: "Profile picture uploaded successfully.",
+    url: downloadURL,
+  };
+};
 
 export const getCoinReward = (minutes: number) => {
   let coinsGiven = 0;
@@ -202,11 +212,11 @@ async function addTask({
   title: string;
   description: string;
   deadline: Date; // Date's months are 0-indexed
-  importance: 'low' | 'medium' | 'high';
+  importance: "low" | "medium" | "high";
   estimatedDurationMinutes: number;
   completed?: boolean;
 }) {
-  const tasksCollectionRef = collection(userDocRef, 'tasks');
+  const tasksCollectionRef = collection(userDocRef, "tasks");
   await addDoc(tasksCollectionRef, {
     title: title,
     description: description,
@@ -225,7 +235,7 @@ async function addEvent({
   endDate,
   travelTimeTo = 0,
   travelTimeBack = 0,
-  source = 'manual',
+  source = "manual",
 }: {
   userDocRef: DocumentReference<DocumentData, DocumentData>;
   title: string;
@@ -234,9 +244,9 @@ async function addEvent({
   endDate: Date; // is a datetime
   travelTimeTo?: number; // time in minutes unavailable while travelling to event destination
   travelTimeBack?: number; // time in minutes needed to get back to being available
-  source?: 'manual' | 'NUSMods'; // e.g. manual input / NUSMods integration
+  source?: "manual" | "NUSMods"; // e.g. manual input / NUSMods integration
 }) {
-  const eventsCollectionRef = collection(userDocRef, 'events');
+  const eventsCollectionRef = collection(userDocRef, "events");
   await addDoc(eventsCollectionRef, {
     title: title,
     description: description,
@@ -257,14 +267,14 @@ async function addFriend({
   userDocRef: DocumentReference<DocumentData, DocumentData>;
   friendId: string;
 }) {
-  const friendsCollectionRef = collection(userDocRef, 'friends');
+  const friendsCollectionRef = collection(userDocRef, "friends");
   await addDoc(friendsCollectionRef, {
     friendId: friendId,
     acceptedAt: serverTimestamp(),
   });
 }
 
-async function addFriendByEmail({
+export async function addFriendByEmail({
   userDocRef,
   friendEmail,
 }: {
@@ -272,12 +282,12 @@ async function addFriendByEmail({
   friendEmail: string;
 }) {
   // Query firestore for user with this email
-  const usersRef = collection(FIREBASE_DATABASE, 'users');
-  const q = query(usersRef, where('email', '==', friendEmail));
+  const usersRef = collection(FIREBASE_DATABASE, "users");
+  const q = query(usersRef, where("email", "==", friendEmail));
   const querySnapshot = await getDocs(q);
 
   if (querySnapshot.empty) {
-    return { success: false, message: 'No user found with that email.' };
+    return { success: false, message: "No user found with that email." };
   }
 
   // Get friend's UID, first matching document
@@ -288,6 +298,28 @@ async function addFriendByEmail({
   await addFriend({ userDocRef, friendId });
 
   return { success: true };
+}
+
+export async function removeFriend({
+  userDocRef,
+  friendId,
+}: {
+  userDocRef: DocumentReference<DocumentData, DocumentData>;
+  friendId: string;
+}) {
+  const friendsCollectionRef = collection(userDocRef, "friends");
+  const q = query(friendsCollectionRef, where("friendId", "==", friendId));
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+    return { success: false, message: "Friend not found." };
+  }
+
+  // Remove the first matching document
+  const friendDoc = querySnapshot.docs[0];
+  await deleteDoc(friendDoc.ref);
+
+  return { success: true, message: "Friend removed successfully." };
 }
 
 const utils = {

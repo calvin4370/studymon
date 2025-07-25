@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { FIREBASE_DATABASE } from "@/firebaseConfig";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
-import utils from "@/constants/utils";
+import { addFriendByEmail, removeFriend } from "@/constants/utils";
 import images from "@/constants/images";
 import Avatar from "@/components/Avatar";
 
@@ -63,7 +63,7 @@ const FriendsScreen = () => {
     }
 
     const userDocRef = doc(FIREBASE_DATABASE, "users", user.uid);
-    const result = await utils.addFriendByEmail({
+    const result = await addFriendByEmail({
       userDocRef,
       friendEmail,
     });
@@ -78,6 +78,34 @@ const FriendsScreen = () => {
       Alert.alert("Error", result.message || "Could not add friend.");
       console.error("Error adding friend:", result.message);
     }
+  };
+
+  const handleRemoveFriend = async (friendId: string) => {
+    if (!user) return;
+    const userDocRef = doc(FIREBASE_DATABASE, "users", user.uid);
+    Alert.alert(
+      "Remove Friend",
+      "Are you sure you want to remove this friend?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Remove",
+          style: "destructive",
+          onPress: async () => {
+            const result = await removeFriend({ userDocRef, friendId });
+            if (result.success) {
+              setFriends((prev) => prev.filter((f) => f.uid !== friendId));
+              Alert.alert("Friend removed.");
+            } else {
+              Alert.alert(
+                "Error",
+                result.message || "Could not remove friend.",
+              );
+            }
+          },
+        },
+      ],
+    );
   };
 
   return (
@@ -97,7 +125,10 @@ const FriendsScreen = () => {
         data={friends}
         keyExtractor={(item) => item.uid}
         renderItem={({ item }) => (
-          <View className="px-2 relative">
+          <TouchableOpacity
+            onPress={() => handleRemoveFriend(item.uid)}
+            className={"px-2"}
+          >
             <View className="flex-row items-center rounded-2xl shadow-md px-4 py-4 mb-3">
               <Avatar
                 source={
@@ -122,7 +153,7 @@ const FriendsScreen = () => {
                 </Text>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
         contentContainerStyle={{ paddingBottom: 20 }}
       />
