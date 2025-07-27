@@ -1,58 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { Task } from "@/constants/interfaces";
-
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+import { FlatList, Text, View } from 'react-native';
+import React from 'react';
+import { router } from 'expo-router';
+import RectangleButton from '@/components/RectangleButton';
+import icons from '@/constants/icons';
+import { ScrollView } from 'react-native';
 
 const ScheduleScreen = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const router = useRouter();
-  const params = useLocalSearchParams();
+  // Handle Button Presses
+  const handleAddTaskButtonPress = () => {
+    router.push('../(scheduleScreens)/AddTaskScreen');
+  };
 
-  useEffect(() => {
-    if (params?.newTask && typeof params.newTask === "string") {
-      try {
-        const newTask: Task = JSON.parse(params.newTask);
-        setTasks((prev) => [...prev, newTask]);
-        router.setParams({ newTask: undefined });
-      } catch {}
-    }
-  }, [params?.newTask, router]);
+  const handleAddEventButtonPress = () => {
+    // router.push('../(scheduleScreens)/AddEventScreen');
+    router.push('../(scheduleScreens)/AddEventScreen');
+  };
 
   return (
-    <View className="flex-1 bg-background px-4 pt-4">
-      <Text className="text-[28px] font-extrabold text-text mb-4">Schedule</Text>
-      <ScrollView className="flex-1">
-        {days.map((day) => (
-          <View key={day} className="mb-6">
-            <Text className="font-bold text-lg text-text mb-2">{day}</Text>
-            {tasks.filter((t) => t.day === day).length === 0 ? (
-              <Text className="ml-2 text-gray-400">No tasks</Text>
-            ) : (
-              tasks
-                .filter((t) => t.day === day)
-                .map((task, idx) => (
-                  <View
-                    key={idx}
-                    className="ml-2 mb-3 p-4 border border-gray-200 rounded-2xl bg-white shadow-sm"
-                  >
-                    <Text className="font-semibold text-accent text-base mb-1">{task.title}</Text>
-                    <Text className="text-gray-700">{task.description}</Text>
-                  </View>
-                ))
-            )}
+    <View className='flex-1'>
+      {/* Main Schedule Content */}
+      <View className='flex-1 p-[20px] border-[1px]'>
+        <View className='flex-1 border-[1px] border-blue-500'>
+          {/* Calendar Overview (But now currently just events overview)*/}
+          <View className='h-[300px] border-[2px] border-green-500'>
+            <Text className='font-bold text-text text-[28px] pb-[10px]'>Upcoming Events</Text>
+            <FlatList data={undefined} renderItem={undefined} />
           </View>
-        ))}
-      </ScrollView>
-      <View className="pb-12">
-        <TouchableOpacity
-          onPress={() => router.push("/(drawer)/(tabs)/AddTaskScreen")}
-          className="bg-accent py-4 rounded-xl items-center mb-8 mx-2"
-          activeOpacity={0.85}
-        >
-          <Text className="font-bold text-xl text-white">Add Task</Text>
-        </TouchableOpacity>
+
+          {/* Upcoming Tasks/Events Overview */}
+          <View className='h-[300px] border-[2px] border-green-500'>
+            <Text className='font-bold text-text text-[28px] pb-[10px]'>Upcoming Tasks</Text>
+            <FlatList data={undefined} renderItem={undefined} />
+          </View>
+        </View>
+      </View>
+
+      {/* Add Task/Event Buttons */}
+      <View className='flex-row px-[20px] gap-[10px] pb-[75px]'>
+        {/* Add Task Button */}
+        <RectangleButton
+          onButtonPress={handleAddTaskButtonPress}
+          icon={icons.news}
+          label='Add Task'
+        />
+
+        {/* Add Event Button */}
+        <RectangleButton
+          onButtonPress={handleAddEventButtonPress}
+          icon={icons.calendar}
+          label='Add Event'
+        />
       </View>
     </View>
   );

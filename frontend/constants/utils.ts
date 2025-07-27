@@ -267,7 +267,7 @@ async function addTask({
   userDocRef: DocumentReference<DocumentData, DocumentData>;
   title: string;
   description: string;
-  deadline: Date; // Date's months are 0-indexed
+  deadline: Date | null; // Date's months are 0-indexed
   importance: "low" | "medium" | "high";
   estimatedDurationMinutes: number;
   completed?: boolean;
