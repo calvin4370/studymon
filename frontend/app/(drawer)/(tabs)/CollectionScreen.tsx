@@ -1,11 +1,14 @@
-import CollectionOverview from '@/components/CollectionOverview';
-import { useRouter } from 'expo-router';
+import { View, Text, ScrollView, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, FlatList } from 'react-native';
+import { useRouter } from 'expo-router';
+import CollectionOverview from '@/components/CollectionOverview';
+import OwnedCardCard from '@/components/OwnedCardCard';
+import AllCardCard from '@/components/AllCardCard';
+import CardDetailsModal from '@/components/CardDetailsModal';
+import values from '@/constants/values';
 
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
-import { cardArtMap } from '@/assets/cards/CardArtMap';
 
 const CollectionScreen = () => {
   const router = useRouter();
@@ -20,6 +23,10 @@ const CollectionScreen = () => {
   // const [errorFetchingCards, setErrorFetchingCards] = useState<string | null>(
   //   null
   // );
+  const [cardDetailsModalVisible, setCardDetailsModalVisible] = useState(false);
+  const [currentSelectedCard, setCurrentSelectedCard] = useState<
+    DisplayCardProps
+  >(values.nullCard);
 
   // Fetch all card info & user's ownedCards from Firestore database
   useEffect(() => {
@@ -91,6 +98,17 @@ const CollectionScreen = () => {
     alert('Search function for card collection TBD');
   };
 
+  const onModalCloseButtonPress = () => {
+    console.log('CardDetailsModal Close Button Pressed')
+    setCardDetailsModalVisible(false)
+  }
+
+  const handleCardSelect = (card: DisplayCardProps) => {
+    setCurrentSelectedCard(card);
+    setCardDetailsModalVisible(true);
+    console.log(`Clicked card: ${card.cardNum}`)
+  };
+
   return (
     <ScrollView className='bg-background pt-[20px] mx-[20px]'>
       <CollectionOverview
@@ -113,21 +131,7 @@ const CollectionScreen = () => {
             <FlatList
               className='pb-[50px]'
               data={ownedCards}
-              renderItem={({ item }) => {
-                const imageSource = cardArtMap[`assets/cards/${item.cardNum}.png`]; // Only works for BASE set for now, add ${item.setCode} later
-                return (
-                  <View className='overflow-hidden'>
-                    {/* Update to be a ownedCollectionCard component */}
-                    <Image
-                      source={imageSource}
-                      className='w-[126px] h-[176px]'
-                      width={126}
-                      height={176}
-                      resizeMode='cover'
-                    />
-                  </View>
-                );
-              }}
+              renderItem={({ item }) => OwnedCardCard(item, handleCardSelect)}
               keyExtractor={(item) => item.cardNum.toString()}
               numColumns={3}
               columnWrapperStyle={{
@@ -158,21 +162,7 @@ const CollectionScreen = () => {
           <FlatList
             className='pb-[50px]'
             data={allCards}
-            renderItem={({ item }) => {
-              const imageSource = cardArtMap[item.cardArt];
-              return (
-                <View className='overflow-hidden'>
-                  {/* Update to be a cardCard component */}
-                  <Image
-                    source={imageSource}
-                    className='w-[126px] h-[176px]'
-                    width={126}
-                    height={176}
-                    resizeMode='cover'
-                  />
-                </View>
-              );
-            }}
+            renderItem={({ item }) => AllCardCard(item, handleCardSelect)}
             keyExtractor={(item) => item.id.toString()}
             numColumns={3}
             columnWrapperStyle={{
@@ -184,6 +174,14 @@ const CollectionScreen = () => {
           />
         </View>
       )}
+
+      {/* Card Details Modal */}
+      <CardDetailsModal
+        isVisible={cardDetailsModalVisible}
+        card={currentSelectedCard}
+        setCardDetailsModalVisible={setCardDetailsModalVisible}
+        onModalCloseButtonPress={onModalCloseButtonPress}
+      />
     </ScrollView>
   );
 };

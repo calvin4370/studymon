@@ -8,6 +8,16 @@ const FIRST_HOUR_RATE = 5;
 const SECOND_HOUR_RATE = 4;
 const THIRD_HOUR_RATE = 3;
 
+
+// nullCard
+const nullCard = {
+  cardNum: 'cardNum',
+  id: 'id',
+  lastObtained: 'lastObtained',
+  numOwned: -1,
+  setCode: 'setCode',
+}
+
 const values = {
   DEFAULT_INITIAL_TIME,
   MAX_TIME_SECONDS,
@@ -16,6 +26,8 @@ const values = {
   FIRST_HOUR_RATE,
   SECOND_HOUR_RATE,
   THIRD_HOUR_RATE,
+
+  nullCard,
 };
 
 export default values;

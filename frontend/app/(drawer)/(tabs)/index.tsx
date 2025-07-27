@@ -1,21 +1,21 @@
-import { Text, View, Image, TouchableOpacity, Modal } from "react-native";
-import { useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import { useRouter } from "expo-router";
-import TimerDisplay from "@/components/TimerDisplay";
-import ThemedTextInput from "@/components/ThemedTextInput";
-import images from "@/constants/images";
+import { Text, View, Image, TouchableOpacity, Modal } from 'react-native';
+import { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { useRouter } from 'expo-router';
+import TimerDisplay from '@/components/TimerDisplay';
+import ThemedTextInput from '@/components/ThemedTextInput';
+import images from '@/constants/images';
 
 export default function Index() {
   const router = useRouter();
   const [timerModalVisible, setTimerModalVisible] = useState<boolean>(false);
   const [timerSeconds, setTimerSeconds] = useState<number>(10); // Default timer to 30 minutes
-  const [inputText, setInputText] = useState<string>("");
+  const [inputText, setInputText] = useState<string>('');
 
   const handleTimerStart = () => {
     console.log(`Timer started with ${timerSeconds} seconds`);
     router.push({
-      pathname: "/TimerActive",
+      pathname: '/TimerActive',
       params: { fullDuration: timerSeconds },
     });
   };
@@ -24,7 +24,7 @@ export default function Index() {
     const inputMinutes = parseInt(inputText, 10);
 
     // Validate Input
-    if (inputText === "test") {
+    if (inputText === 'test') {
       setTimerSeconds(10);
     } else if (
       !isNaN(inputMinutes) &&
@@ -33,9 +33,9 @@ export default function Index() {
     ) {
       setTimerSeconds(inputMinutes * 60);
     } else {
-      alert("Input a number of minutes between 1 and 180");
+      alert('Input a number of minutes between 1 and 180');
     }
-    setInputText(""); // Reset text for future input
+    setInputText(''); // Reset text for future input
     setTimerModalVisible(false);
   };
 
@@ -44,17 +44,17 @@ export default function Index() {
   };
 
   return (
-    <View className="flex-1 bg-background items-center pt-6">
-      <StatusBar style="dark" />
+    <View className='flex-1 bg-background items-center pt-6'>
+      <StatusBar style='dark' />
 
       {/* Main Content */}
-      <View className="flex-1 items-center p-6 mt-[50px]">
+      <View className='flex-1 items-center p-6 mt-[50px]'>
         {/* Pan Handle Timer */}
-        <View className="items-center mt-[10px]">
+        <View className='items-center mt-[10px]'>
           <TouchableOpacity
             onPress={() =>
               alert(
-                "This is meant to be an interactable pan handle component to adjust Timer",
+                'This is meant to be an interactable pan handle component to adjust Timer'
               )
             }
             activeOpacity={0.85}
@@ -66,7 +66,7 @@ export default function Index() {
         {/* Timer Display */}
         <TouchableOpacity
           onPress={() => setTimerModalVisible(true)}
-          className="items-center mt-[10px]"
+          className='items-center mt-[10px]'
         >
           <TimerDisplay seconds={timerSeconds} />
         </TouchableOpacity>
@@ -74,46 +74,46 @@ export default function Index() {
         {/* Start Button */}
         <TouchableOpacity
           onPress={handleTimerStart}
-          className="w-[180px] h-[60px] bg-primary rounded-full justify-center items-center shadow-lg border-2 border-accent-1 active:opacity-75 mt-[50px]"
+          className='w-[180px] h-[60px] bg-primary rounded-full justify-center items-center shadow-lg border-2 border-accent-1 active:opacity-75 mt-[50px]'
         >
-          <Text className="text-text text-[24px] font-bold">Start</Text>
+          <Text className='text-text text-[24px] font-bold'>Start</Text>
         </TouchableOpacity>
       </View>
 
       {/* Modal to prompt User for input */}
       <Modal
         visible={timerModalVisible}
-        animationType="slide"
-        presentationStyle="formSheet"
+        animationType='slide'
+        presentationStyle='formSheet'
         onRequestClose={() => setTimerModalVisible(false)} // handles Android back button / IOS back gesture
       >
-        <View className="bg-background items-center p-[60px]">
-          <Text className="text-text font-bold text-[32px]">Input Time</Text>
-          <Text className="text-text font-normal text-[32px] mb-[50px]">
-            {"(1-180 minutes)"}
+        <View className='bg-background items-center p-[60px]'>
+          <Text className='text-text font-bold text-[32px]'>Input Time</Text>
+          <Text className='text-text font-normal text-[32px] mb-[50px]'>
+            {'(1-180 minutes)'}
           </Text>
           <ThemedTextInput
-            placeholder="Enter minutes"
+            placeholder='Enter minutes'
             value={inputText}
             onChangeText={(text: string) => setInputText(text)}
           />
 
           {/* Cancel and Confirm Buttons */}
-          <View className="flex-row">
+          <View className='flex-row'>
             <TouchableOpacity
               onPress={handleCancel}
-              className="w-[150px] h-[60px] bg-accent rounded-full justify-center items-center shadow-lg border-2 border-accent-2 active:opacity-75 mt-[50px]"
+              className='w-[150px] h-[60px] bg-accent rounded-full justify-center items-center shadow-lg border-2 border-accent-2 active:opacity-75 mt-[50px]'
             >
-              <Text className="text-accent-2 text-[24px] font-bold">
+              <Text className='text-accent-2 text-[24px] font-bold'>
                 Cancel
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={handleConfirm}
-              className="w-[150px] h-[60px] bg-primary rounded-full justify-center items-center shadow-lg border-2 border-accent active:opacity-75 mt-[50px] ml-[40px]"
+              className='w-[150px] h-[60px] bg-primary rounded-full justify-center items-center shadow-lg border-2 border-accent active:opacity-75 mt-[50px] ml-[40px]'
             >
-              <Text className="text-accent text-[24px] font-bold">Confirm</Text>
+              <Text className='text-accent text-[24px] font-bold'>Confirm</Text>
             </TouchableOpacity>
           </View>
         </View>
