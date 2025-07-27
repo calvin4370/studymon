@@ -59,7 +59,13 @@ const CustomDrawer = () => {
         options={{
           title: "Open Packs",
           drawerIcon: () => (
-            <Image source={icons.cards} className='w-[24px] h-[24px]' tintColor={colors.text} width={24} height={24}/>
+            <Image
+              source={icons.cards}
+              className="w-[24px] h-[24px]"
+              tintColor={colors.text}
+              width={24}
+              height={24}
+            />
           ),
         }}
       />
@@ -88,6 +94,12 @@ const CustomDrawer = () => {
           drawerIcon: () => (
             <Ionicons name="trophy" size={24} color={colors.text} />
           ),
+        }}
+      />
+      <Drawer.Screen
+        name="FriendProfileScreen"
+        options={{
+          drawerItemStyle: { display: "none" },
         }}
       />
     </Drawer>
