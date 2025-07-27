@@ -21,6 +21,12 @@ const PackOpeningScreen = () => {
   const [ownedPacks, setOwnedPacks] = useState<any[]>([]); // Quickfix, Figure out what to do with the any type later
   const [openedCards, setOpenedCards] = useState<any[]>([]); // Quickfix, Figure out what to do with the any type later
 
+  // Total number of owned packs
+  const totalOwnedPacks = ownedPacks.reduce(
+    (total, pack) => total + (pack.numOwned || 0),
+    0,
+  );
+
   // Fetch all  user's ownedPacks from Firestore database
   useEffect(() => {
     const fetchPackData = async () => {
@@ -64,7 +70,7 @@ const PackOpeningScreen = () => {
     <View className="flex-1 bg-background-1 p-[20px]">
       <View className="bg-background-1">
         <Text className="text-text font-bold text-[30px] mb-[20px]">
-          Your Packs ({ownedPacks.length} owned)
+          Your Packs ({totalOwnedPacks} owned)
         </Text>
         <FlatList
           className="p-[20px] border-[2px] rounded-[20px]"
