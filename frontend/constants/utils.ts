@@ -14,6 +14,7 @@ import {
   getDoc,
   getDocs,
   query,
+  runTransaction,
   serverTimestamp,
   setDoc,
   updateDoc,
@@ -322,6 +323,55 @@ export async function removeFriend({
   return { success: true, message: "Friend removed successfully." };
 }
 
+export async function buyPack(pack: {
+  setCode: string;
+  packTier: string;
+  price: number;
+}) {
+  const userId = FIREBASE_AUTH.currentUser?.uid;
+  if (!userId) throw new Error("User not authenticated.");
+
+  const userDocRef = doc(FIREBASE_DATABASE, "users", userId);
+  const packDocId = `${pack.setCode}-${pack.packTier}`;
+  const packRef = doc(FIREBASE_DATABASE, "users", userId, "packs", packDocId);
+
+  await runTransaction(FIREBASE_DATABASE, async (transaction) => {
+    const userSnap = await transaction.get(userDocRef);
+    const packSnap = await transaction.get(packRef);
+
+    if (!userSnap.exists()) {
+      throw new Error("User document does not exist.");
+    }
+    const userData = userSnap.data();
+    const currentCoins = userData.coins ?? 0;
+
+    if (currentCoins < pack.price) {
+      throw new Error("Insuffient coins");
+    }
+
+    // Deduct coins
+    transaction.update(userDocRef, { coins: currentCoins - pack.price });
+
+    // Update or create pack
+    if (packSnap.exists()) {
+      // if pack exists, increment the numOwned
+      const currentNumOwned = packSnap.data().numOwned || 0;
+      transaction.update(packRef, {
+        numOwned: currentNumOwned + 1,
+        lastObtained: serverTimestamp(),
+      });
+    } else {
+      // if pack does not exist, create it
+      transaction.set(packRef, {
+        setCode: pack.setCode,
+        packTier: pack.packTier,
+        numOwned: 1,
+        lastObtained: serverTimestamp(),
+      });
+    }
+  });
+}
+
 const utils = {
   initialiseUserDoc,
   updateUserDocForLogin,
@@ -332,6 +382,7 @@ const utils = {
   addFriend,
   addFriendByEmail,
   removeFriend,
+  buyPack,
 };
 
 export default utils;

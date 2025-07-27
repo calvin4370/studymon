@@ -1,10 +1,50 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  Alert,
+} from "react-native";
 import { PACK_SIZES, FACULTY_PACKS } from "@/constants/packs";
 import icons from "@/constants/icons";
+import { buyPack } from "@/constants/utils";
 
 export default function StoreScreen() {
   const [selectedPack, setSelectedPack] = useState<string | null>(null);
+  const [isBuying, setIsBuying] = useState(false);
+
+  // Helper to get pack info by id
+  const getSelectedPackInfo = () => {
+    return (
+      PACK_SIZES.find((pack) => pack.id === selectedPack) ||
+      FACULTY_PACKS.find((pack) => pack.id === selectedPack)
+    );
+  };
+
+  const handleBuy = async () => {
+    const pack = getSelectedPackInfo();
+    if (!pack) return;
+
+    // For now, all setCode is "BASE", and packTier is the pack name (from packs.ts)
+    const packData = {
+      setCode: "BASE",
+      packTier: pack.name,
+      price: pack.price,
+    };
+
+    setIsBuying(true);
+    try {
+      await buyPack(packData);
+      Alert.alert("Success", `You bought a ${pack.name}!`);
+      setSelectedPack(null); // Reset selection after purchase
+    } catch (err: any) {
+      Alert.alert("Error", err.message || "Failed to buy pack");
+    } finally {
+      setIsBuying(false);
+    }
+  };
 
   return (
     <View className="flex-1 bg-background px-4 pt-4">
@@ -84,11 +124,12 @@ export default function StoreScreen() {
           ))}
         </ScrollView>
       </View>
-      
+
       {/* Buy button */}
       <View className="flex-none py-2">
         <TouchableOpacity
           disabled={!selectedPack}
+          onPress={handleBuy}
           className={`
           ${selectedPack ? "bg-accent" : "bg-gray-300"}
           py-4 rounded-xl items-center mb-8 mx-2
@@ -97,7 +138,7 @@ export default function StoreScreen() {
           <Text
             className={`font-bold text-xl ${selectedPack ? "text-white" : "text-gray-500"}`}
           >
-            BUY
+            {isBuying ? "Buying..." : "BUY"}
           </Text>
         </TouchableOpacity>
       </View>
