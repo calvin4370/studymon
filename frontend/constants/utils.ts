@@ -17,6 +17,7 @@ import {
   runTransaction,
   serverTimestamp,
   setDoc,
+  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -163,6 +164,60 @@ export const uploadProfilePic = async () => {
     url: downloadURL,
   };
 };
+
+export async function getFocusStats(userId: string) {
+  const now = new Date();
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+  );
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - 6); // 7 days ago
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const sessionsRef = collection(
+    FIREBASE_DATABASE,
+    "users",
+    userId,
+    "focusSessions",
+  );
+
+  // Daily
+  const dailyQuery = query(
+    sessionsRef,
+    where("timestamp", ">=", Timestamp.fromDate(startOfToday)),
+  );
+  const dailySnap = await getDocs(dailyQuery);
+  const dailyFocusSeconds = dailySnap.docs.reduce(
+    (total, doc) => total + (doc.data().duration || 0),
+    0,
+  );
+
+  // Weekly
+  const weeklyQuery = query(
+    sessionsRef,
+    where("timestamp", ">=", Timestamp.fromDate(startOfWeek)),
+  );
+  const weeklySnap = await getDocs(weeklyQuery);
+  const weeklyFocusSeconds = weeklySnap.docs.reduce(
+    (total, doc) => total + (doc.data().duration || 0),
+    0,
+  );
+
+  // Monthly
+  const monthlyQuery = query(
+    sessionsRef,
+    where("timestamp", ">=", Timestamp.fromDate(startOfMonth)),
+  );
+  const monthlySnap = await getDocs(monthlyQuery);
+  const monthlyFocusSeconds = monthlySnap.docs.reduce(
+    (total, doc) => total + (doc.data().duration || 0),
+    0,
+  );
+
+  return { dailyFocusSeconds, weeklyFocusSeconds, monthlyFocusSeconds };
+}
 
 export const getCoinReward = (minutes: number) => {
   let coinsGiven = 0;
@@ -377,6 +432,7 @@ const utils = {
   updateUserDocForLogin,
   getCoinReward,
   uploadProfilePic,
+  getFocusStats,
   addTask,
   addEvent,
   addFriend,

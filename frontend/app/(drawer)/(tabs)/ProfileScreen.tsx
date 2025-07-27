@@ -2,7 +2,6 @@ import {
   View,
   ScrollView,
   Text,
-  Image,
   TouchableOpacity,
   Dimensions,
   Keyboard,
@@ -22,7 +21,7 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import helperFunctions from "@/constants/helperFunctions";
-import { uploadProfilePic } from "@/constants/utils";
+import { getFocusStats, uploadProfilePic } from "@/constants/utils";
 
 const ProfileScreen = () => {
   // Calculate safe area to adjust widths around
@@ -40,6 +39,9 @@ const ProfileScreen = () => {
   // for changing username
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [usernameInput, setUsernameInput] = useState(username);
+  const [dailyFocusSeconds, setDailyFocusSeconds] = useState(0);
+  const [weeklyFocusSeconds, setWeeklyFocusSeconds] = useState(0);
+  const [monthlyFocusSeconds, setMonthlyFocusSeconds] = useState(0);
 
   // Fetch user data to get Basic User Stats
   useEffect(() => {
@@ -53,9 +55,18 @@ const ProfileScreen = () => {
 
           if (userSnap.exists()) {
             const userData = userSnap.data();
+            // Fetch focus stats
+            const {
+              dailyFocusSeconds,
+              weeklyFocusSeconds,
+              monthlyFocusSeconds,
+            } = await getFocusStats(userId);
 
             // Update state for user document fields
             setTotalFocusSeconds(userData.totalFocusTime);
+            setDailyFocusSeconds(dailyFocusSeconds);
+            setWeeklyFocusSeconds(weeklyFocusSeconds);
+            setMonthlyFocusSeconds(monthlyFocusSeconds);
             setUsername(userData.displayName || "No Username");
             setEmail(userData.email || "No Email");
             setProfilePic(userData.profilePic || "");
@@ -114,11 +125,6 @@ const ProfileScreen = () => {
     Keyboard.dismiss();
   };
 
-  // handling statistics press
-  const handleStatisticsPress = () => {
-    alert("This will link to the User's statistics page");
-  };
-
   return (
     <View className="flex-1 bg-background items-center justify-start">
       <ScrollView
@@ -167,18 +173,28 @@ const ProfileScreen = () => {
 
         {/* Basic User Stats */}
         {/* Placeholder for now */}
-        <TouchableOpacity
-          onPress={() => alert("TODO")}
-          style={{ width: usableWidth - xPadding * 2, height: 200 }}
+        <View
+          style={{ width: usableWidth - xPadding * 2, height: 290 }}
           className="bg-accent rounded-[32px] self-center shadow-lg active:opacity-85 mt-[26px] p-[20px]"
-          activeOpacity={0.75}
         >
-          <Text className="text-background text-[22px] font-semibold">
+          <Text className="text-text text-[22px] font-extrabold">
             Basic User Stats
           </Text>
           <Text className="text-background text-[16px] font-medium mt-[10px]">
-            Time Focused:{" "}
+            Total Time Focused:{" "}
             {helperFunctions.formatTimeAsSentence(totalFocusSeconds)}
+          </Text>
+          <Text className="text-background text-[16px] font-medium mt-[10px]">
+            Daily Focus:{" "}
+            {helperFunctions.formatTimeAsSentence(dailyFocusSeconds)}
+          </Text>
+          <Text className="text-background text-[16px] font-medium mt-[10px]">
+            Weekly Focus:{" "}
+            {helperFunctions.formatTimeAsSentence(weeklyFocusSeconds)}
+          </Text>
+          <Text className="text-background text-[16px] font-medium mt-[10px]">
+            Monthly Focus:{" "}
+            {helperFunctions.formatTimeAsSentence(monthlyFocusSeconds)}
           </Text>
           <Text className="text-background text-[16px] font-medium mt-[10px]">
             Collection: {collectionCount.toString().padStart(3, "0")} / 212
@@ -187,16 +203,7 @@ const ProfileScreen = () => {
           <Text className="text-background text-[16px] font-medium mt-[10px]">
             Tasks Completed: {0}
           </Text>
-        </TouchableOpacity>
-
-        {/* Statistics */}
-        {/* Placeholder for now */}
-        <TouchableOpacity
-          onPress={() => handleStatisticsPress()}
-          activeOpacity={0.85}
-        >
-          <Image source={images.statisticsPlaceholder} className="mt-[36px]" />
-        </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );

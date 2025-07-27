@@ -59,7 +59,13 @@ const CustomDrawer = () => {
         options={{
           title: "Open Packs",
           drawerIcon: () => (
-            <Image source={icons.cards} className='w-[24px] h-[24px]' tintColor={colors.text} width={24} height={24}/>
+            <Image
+              source={icons.cards}
+              className="w-[24px] h-[24px]"
+              tintColor={colors.text}
+              width={24}
+              height={24}
+            />
           ),
         }}
       />
@@ -94,6 +100,9 @@ const CustomDrawer = () => {
         name="(scheduleScreens)" // Ignore all Screens in (modals)
         options={{
           drawerLabel: () => null,
+        name="FriendProfileScreen"
+        options={{
+          drawerItemStyle: { display: "none" },
         }}
       />
     </Drawer>
