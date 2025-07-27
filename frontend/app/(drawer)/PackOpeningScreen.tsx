@@ -1,6 +1,6 @@
 import { View, Text, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from "@/firebaseConfig";
 import PackCard from "../../components/PackCard";
 import { PACK_SIZES } from "@/constants/packs";
@@ -32,12 +32,16 @@ const PackOpeningScreen = () => {
             userId,
             "packs",
           );
-          const ownedPacksSnap = await getDocs(ownedPacksRef);
-          const fetchedOwnedPacks = ownedPacksSnap.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setOwnedPacks(fetchedOwnedPacks);
+          // Listen for real-time updates
+          const unsubscribe = onSnapshot(ownedPacksRef, (snapshot) => {
+            const fetchedOwnedPacks = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+            setOwnedPacks(fetchedOwnedPacks);
+          });
+          // Cleanup listener on unmount
+          return () => unsubscribe();
         } else {
           console.warn("Cannot find userId for current user");
           setOwnedPacks([]);
