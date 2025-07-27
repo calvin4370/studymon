@@ -32,3 +32,23 @@ interface DisplayCardProps {
   numOwned?: number;
   setCode?: string;
 }
+
+interface Task {
+  title: string
+  description: string
+  estimatedDurationMinutes: number
+  deadline?: Date | null
+  importance: 'low' | 'medium' | 'high'
+  completed: boolean
+}
+
+interface Event {
+  title: string
+  description: string
+  startDate: Date
+  endDate: Date
+  createdAt: Date
+  travelTimeTo: number
+  travelTimeBack: number
+  source: 'manual' | 'NUSMods'
+}

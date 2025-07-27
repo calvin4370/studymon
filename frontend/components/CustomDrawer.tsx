@@ -90,6 +90,12 @@ const CustomDrawer = () => {
           ),
         }}
       />
+      <Drawer.Screen
+        name="(scheduleScreens)" // Ignore all Screens in (modals)
+        options={{
+          drawerLabel: () => null,
+        }}
+      />
     </Drawer>
   );
 };
