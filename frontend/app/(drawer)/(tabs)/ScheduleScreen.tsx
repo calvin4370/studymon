@@ -3,7 +3,6 @@ import React from 'react';
 import { router } from 'expo-router';
 import RectangleButton from '@/components/RectangleButton';
 import icons from '@/constants/icons';
-import { ScrollView } from 'react-native';
 
 const ScheduleScreen = () => {
   // Handle Button Presses

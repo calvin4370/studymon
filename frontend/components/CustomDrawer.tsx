@@ -100,6 +100,9 @@ const CustomDrawer = () => {
         name="(scheduleScreens)" // Ignore all Screens in (modals)
         options={{
           drawerLabel: () => null,
+        }}
+      />
+      <Drawer.Screen
         name="FriendProfileScreen"
         options={{
           drawerItemStyle: { display: "none" },
