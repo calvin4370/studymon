@@ -1,4 +1,5 @@
 import {
+  Text,
   View,
   Image,
   TouchableOpacity,
@@ -9,23 +10,26 @@ import NumOwnedPill from "@/components/NumOwnedPill";
 
 interface PackCardProps {
   numOwned: number;
+  packTier: string;
+  name: string;
+  image: any;
   onPackPress: (event: GestureResponderEvent) => void | undefined;
 }
 
-const PackCard = ({ numOwned, onPackPress }: PackCardProps) => {
-  const imageSource = require("@/assets/images/packs-images/basic-pack.png"); // Only standard pack for now
-
+// Pass display name and image into PackCard for display
+const PackCard = ({ numOwned, name, image, onPackPress }: PackCardProps) => {
   return (
     <View className="items-center">
       <TouchableOpacity onPress={onPackPress}>
         <Image
-          source={imageSource}
+          source={image}
           className="w-[126px] h-[176px]"
           width={126}
           height={176}
           resizeMode="cover"
         />
       </TouchableOpacity>
+      <Text className={"mb-2 font-bold text-text>"}>{name}</Text>
       <NumOwnedPill numOwned={numOwned} />
     </View>
   );

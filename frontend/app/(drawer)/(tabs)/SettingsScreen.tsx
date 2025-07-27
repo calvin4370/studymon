@@ -15,7 +15,6 @@ const SettingsScreen = () => {
     try {
       const response = await signOut(FIREBASE_AUTH);
       console.log("Logout successful:", response);
-      alert("Logged out successfully!");
       router.replace("/(auth)/LoginScreen");
     } catch (error: any) {
       console.error("Logout error:", error);

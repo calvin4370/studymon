@@ -30,7 +30,7 @@ export default function StoreScreen() {
     // For now, all setCode is "BASE", and packTier is the pack name (from packs.ts)
     const packData = {
       setCode: "BASE",
-      packTier: pack.name,
+      packTier: pack.id,
       price: pack.price,
     };
 
