@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from "@/firebaseConfig";
 import PackCard from "../../components/PackCard";
-import { PACK_SIZES } from "@/constants/packs";
+import { FACULTY_PACKS, PACK_SIZES } from "@/constants/packs";
 
 // Helper to get display name and image by packTier
 function getPackMeta(packTier: string) {
-  const meta = PACK_SIZES.find((pack) => pack.id === packTier);
+  const meta =
+    PACK_SIZES.find((pack) => pack.id === packTier) ||
+    FACULTY_PACKS.find((pack) => pack.id === packTier);
   return {
     name: meta?.name ?? packTier,
     image: meta?.image,
