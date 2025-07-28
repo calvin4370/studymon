@@ -9,6 +9,7 @@ import values from '@/constants/values';
 
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
+import { DisplayCardProps } from '@/interfaces/interfaces';
 
 const CollectionScreen = () => {
   const router = useRouter();
