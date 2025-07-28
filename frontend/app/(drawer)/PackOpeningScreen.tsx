@@ -1,9 +1,11 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, ScrollView, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from "@/firebaseConfig";
 import PackCard from "../../components/PackCard";
 import { FACULTY_PACKS, PACK_SIZES } from "@/constants/packs";
+import { openPackForUser } from "@/constants/utils";
+import OwnedCardCard from "@/components/OwnedCardCard";
 
 // Helper to get display name and image by packTier
 function getPackMeta(packTier: string) {
@@ -64,7 +66,48 @@ const PackOpeningScreen = () => {
     fetchPackData();
   }, []); // Dependency array empty so that this only runs once when component mounts
 
-  // Function definitions for Buttons
+  // Confirmation and pack opening logic
+  const handleOpenPack = async (pack: any) => {
+    if (pack.numOwned <= 0) {
+      Alert.alert("No packs left", "You do not own this pack.");
+      return;
+    }
+    Alert.alert(
+      "Open Pack",
+      `Are you sure you want to open a ${getPackMeta(pack.packTier).name}?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Open",
+          onPress: async () => {
+            try {
+              const opened = await openPackForUser(pack.packTier);
+              setOpenedCards(opened);
+
+              // Reduce numOwned for this pack
+              const userId = FIREBASE_AUTH.currentUser?.uid;
+              const packDocId = pack.id;
+              const packRef = doc(
+                FIREBASE_DATABASE,
+                "users",
+                userId!,
+                "packs",
+                packDocId,
+              );
+              await updateDoc(packRef, {
+                numOwned: pack.numOwned - 1,
+              });
+            } catch (err) {
+              Alert.alert("Error opening pack", err.message || "Unknown error");
+            }
+          },
+        },
+      ],
+    );
+  };
+
+  // Only show packs if user has any owned packs
+  const visibleOwnedPacks = ownedPacks.filter((pack) => pack.numOwned > 0);
 
   return (
     <View className="flex-1 bg-background-1 p-[20px]">
@@ -74,7 +117,7 @@ const PackOpeningScreen = () => {
         </Text>
         <FlatList
           className="p-[20px] border-[2px] rounded-[20px]"
-          data={ownedPacks}
+          data={visibleOwnedPacks}
           renderItem={({ item }) => {
             const { name, image } = getPackMeta(item.packTier);
             return (
@@ -84,9 +127,7 @@ const PackOpeningScreen = () => {
                   packTier={item.packTier}
                   name={name}
                   image={image}
-                  onPackPress={() => {
-                    alert("TBD");
-                  }}
+                  onPackPress={() => handleOpenPack(item)}
                 />
               </View>
             );
@@ -100,9 +141,17 @@ const PackOpeningScreen = () => {
           Opened Cards
         </Text>
         {openedCards.length > 0 ? (
-          <View>
-            <Text>Opened cards: {openedCards}</Text>
-          </View>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <View className="flex-row flex-wrap">
+              {openedCards.map((card) => (
+                <OwnedCardCard
+                  key={card.cardNum}
+                  {...card}
+                  handleCardSelect={() => {}} // or your own handler
+                />
+              ))}
+            </View>
+          </ScrollView>
         ) : (
           // No opened cards i.e. have not opened packs yet
           <View className="h-[200px] items-center justify-center">
