@@ -427,6 +427,108 @@ export async function buyPack(pack: {
   });
 }
 
+// Helper: Get random rarity based on probabilities
+function getRandomRarity(): "Common" | "Uncommon" | "Rare" | "Double Rare" {
+  const rand = Math.random();
+  if (rand < 0.74) return "Common";
+  if (rand < 0.94) return "Uncommon";
+  if (rand < 0.99) return "Rare";
+  return "Double Rare";
+}
+
+// Helper: Guaranteed rare or better
+function getGuaranteedRareRarity(): "Rare" | "Double Rare" {
+  return Math.random() < 0.9 ? "Rare" : "Double Rare";
+}
+
+// Main: Open a pack for the user
+export async function openPackForUser(): Promise<any[]> {
+  const userId = FIREBASE_AUTH.currentUser?.uid;
+  if (!userId) throw new Error("User not authenticated.");
+
+  // Fetch all cards
+  const allCardsRef = collection(FIREBASE_DATABASE, "cards");
+  const allCardsSnap = await getDocs(allCardsRef);
+  const allCards = allCardsSnap.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  // Group cards by rarity
+  const rarityMap: Record<string, any[]> = {
+    Common: [],
+    Uncommon: [],
+    Rare: [],
+    "Double Rare": [],
+  };
+  allCards.forEach((card) => {
+    if (rarityMap[card.rarity]) rarityMap[card.rarity].push(card);
+  });
+
+  // Generate rarities for 5 cards
+  let rarities: string[] = [];
+  for (let i = 0; i < 5; i++) rarities.push(getRandomRarity());
+
+  // Guarantee at least one Rare or better
+  if (!rarities.some((r) => r === "Rare" || r === "Double Rare")) {
+    const guaranteedRarity = getGuaranteedRareRarity();
+    const replaceIdx = Math.floor(Math.random() * 5);
+    rarities[replaceIdx] = guaranteedRarity;
+  }
+
+  // Select cards by rarity, ensuring no duplicates
+  const selectedCards: any[] = [];
+  const usedIds = new Set<string>();
+  for (const rarity of rarities) {
+    const pool = rarityMap[rarity].filter((card) => !usedIds.has(card.id));
+    if (pool.length === 0) continue;
+    const card = pool[Math.floor(Math.random() * pool.length)];
+    selectedCards.push(card);
+    usedIds.add(card.id);
+  }
+
+  // Add each card to user's ownedCards (doc name = id, setCode = "BASE")
+  const minimalCards: any[] = [];
+  for (const card of selectedCards) {
+    const cardNum = card.id.slice(-3); // e.g. "060"
+    const setCode = "BASE";
+    const cardRef = doc(
+      FIREBASE_DATABASE,
+      "users",
+      userId,
+      "ownedCards",
+      card.id, // doc name is full id, e.g. "BASE060"
+    );
+    await runTransaction(FIREBASE_DATABASE, async (transaction) => {
+      const cardSnap = await transaction.get(cardRef);
+      if (cardSnap.exists()) {
+        const currentNumOwned = cardSnap.data().numOwned || 0;
+        transaction.update(cardRef, {
+          cardNum,
+          setCode,
+          numOwned: currentNumOwned + 1,
+          lastObtained: serverTimestamp(),
+        });
+      } else {
+        transaction.set(cardRef, {
+          cardNum,
+          setCode,
+          numOwned: 1,
+          lastObtained: serverTimestamp(),
+        });
+      }
+    });
+    minimalCards.push({
+      cardNum,
+      setCode,
+      numOwned: 1,
+      id: card.id,
+    });
+  }
+
+  return minimalCards;
+}
+
 const utils = {
   initialiseUserDoc,
   updateUserDocForLogin,
