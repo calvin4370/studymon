@@ -1,14 +1,17 @@
-import { View, Text, ScrollView, FlatList } from "react-native";
-import { useEffect, useState } from "react";
-import { useRouter } from "expo-router";
-import CollectionOverview from "@/components/CollectionOverview";
-import OwnedCardCard from "@/components/OwnedCardCard";
-import AllCardCard from "@/components/AllCardCard";
-import CardDetailsModal from "@/components/CardDetailsModal";
-import values from "@/constants/values";
+import { View, Text, ScrollView, FlatList } from 'react-native';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'expo-router';
+import CollectionOverview from '@/components/CollectionOverview';
+import OwnedCardCard from '@/components/OwnedCardCard';
+import AllCardCard from '@/components/AllCardCard';
+import CardDetailsModal from '@/components/CardDetailsModal';
+import values from '@/constants/values';
 
-import { FIREBASE_AUTH, FIREBASE_DATABASE } from "@/firebaseConfig";
+import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
+import { DisplayCardProps } from '@/interfaces/interfaces';
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
+
 
 const CollectionScreen = () => {
   const router = useRouter();

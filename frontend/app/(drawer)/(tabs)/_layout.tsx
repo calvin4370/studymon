@@ -92,13 +92,6 @@ const _layout = () => {
             ),
           }}
         />
-        <Tabs.Screen
-          name="AddTaskScreen"
-          options={{
-            headerShown: false,
-            href: null, // completely removes it from navigation
-          }}
-        />
       </Tabs>
       
     </SafeAreaView>
