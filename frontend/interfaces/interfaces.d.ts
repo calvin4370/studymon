@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 interface OwnedCardProps {
   cardNum: string;
   id: string;
@@ -37,7 +39,7 @@ interface Task {
   title: string
   description: string
   estimatedDurationMinutes: number
-  deadline?: Date | null
+  deadline?: Timestamp | null
   importance: 'low' | 'medium' | 'high'
   completed: boolean
 }
@@ -45,9 +47,9 @@ interface Task {
 interface Event {
   title: string
   description: string
-  startDate: Date
-  endDate: Date
-  createdAt: Date
+  startDate: Timestamp
+  endDate: Timestamp
+  createdAt: Timestamp
   travelTimeTo: number
   travelTimeBack: number
   source: 'manual' | 'NUSMods'

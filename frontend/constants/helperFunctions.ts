@@ -39,10 +39,49 @@ function formatTimeAsSentence(seconds: number) {
   }
 }
 
+function formatTimeAsShort(seconds: number) {
+  const resultSentence: string[] = [];
+  const [h, m, s] = formatTime(seconds);
+
+  if (h > 0) {
+    resultSentence.push(`${h}h`);
+  }
+  if (m > 0) {
+    resultSentence.push(`${m}min`);
+  }
+  if (s > 0 || resultSentence.length === 0) {
+    // Always show seconds if hours and minutes are zero
+    resultSentence.push(`${s}s`);
+  }
+
+  // Join the parts with spaces and 'and'
+  if (resultSentence.length === 3) {
+    return `${resultSentence[0]} ${resultSentence[1]} ${resultSentence[2]}`;
+  } else if (resultSentence.length === 2) {
+    return `${resultSentence[0]} ${resultSentence[1]}`;
+  } else if (resultSentence.length === 1) {
+    return resultSentence[0];
+  } else {
+    return '0s';
+  }
+}
+
+function importanceStars(importance: 'low' | 'medium' | 'high') {
+  if (importance === 'low') {
+    return '★'
+  } else if (importance === 'medium') {
+    return '★★'
+  } else if (importance === 'high') {
+    return '★★★'
+  }
+}
+
 const helperFunctions = {
   padWithZero,
   formatTime,
   formatTimeAsSentence,
+  formatTimeAsShort,
+  importanceStars,
 };
 
 export default helperFunctions;

@@ -28,7 +28,10 @@ const EventCard = ({
           </View>
 
           <View className='flex-row justify-between gap-[30px]'>
-            <Text className='font-semibold text-text text-[14px]'>{startDate.toDate().toLocaleString()} - {endDate.toDate().toLocaleString()}</Text>
+            <Text className='font-semibold text-text text-[14px]'>
+              {startDate.toDate().toLocaleString()} -{' '}
+              {endDate.toDate().toLocaleString()}
+            </Text>
           </View>
         </View>
       </View>
