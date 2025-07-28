@@ -4,12 +4,7 @@ import { router } from 'expo-router';
 import RectangleButton from '@/components/RectangleButton';
 import icons from '@/constants/icons';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-} from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import TaskCard from '@/components/TaskCard';
 import EventCard from '@/components/EventCard';
 import utils from '@/constants/utils';
@@ -26,36 +21,48 @@ const ScheduleScreen = () => {
     router.push('../(scheduleScreens)/AddEventScreen');
   };
 
+  const handleTaskCardPress = (taskId: string) => {
+    // Unexpanded the previously expanded TaskCard if expanded, and if a new TaskCard is pressed, expand that one
+    setExpandedTaskId(prevId => (prevId === taskId ? null : taskId));
+  };
+
   // States
   const [tasks, setTasks] = useState<any[]>([]); // Quickfix, Figure out what to do with the any type later
   const [events, setEvents] = useState<any[]>([]); // Quickfix, Figure out what to do with the any type later
+  const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
 
   // Read user's Tasks and Events from firestore
   useEffect(() => {
     const userId = FIREBASE_AUTH.currentUser?.uid;
 
     if (!userId) {
-      console.error()
-      return
+      console.error();
+      return;
     }
-    
+
     const tasksRef = collection(FIREBASE_DATABASE, 'users', userId, 'tasks');
     const tasksQuery = query(tasksRef);
 
     // Set up real-time listener
-    const unsubscribe = onSnapshot(tasksQuery, (snapshot) => {
-      const fetchedTasks = snapshot.docs.map((doc) => ({
-        id: doc.id, // Get the Firestore document ID for keyExtractor
-        ...doc.data(),
-      })) as Task[];
-      
-      // Sort tasks according to StudyMon Algorithm
-      const sortedTasks = [...fetchedTasks].sort(utils.taskPriorityComparator);
+    const unsubscribe = onSnapshot(
+      tasksQuery,
+      (snapshot) => {
+        const fetchedTasks = snapshot.docs.map((doc) => ({
+          id: doc.id, // Get the Firestore document ID for keyExtractor
+          ...doc.data(),
+        })) as Task[];
 
-      setTasks(sortedTasks);
-    }, (err) => {
-      console.error('Error fetching tasks:', err);
-    });
+        // Sort tasks according to StudyMon Algorithm
+        const sortedTasks = [...fetchedTasks].sort(
+          utils.taskPriorityComparator
+        );
+
+        setTasks(sortedTasks);
+      },
+      (err) => {
+        console.error('Error fetching tasks:', err);
+      }
+    );
 
     // Cleanup function: Unsubscribe when component unmounts
     return () => unsubscribe();
@@ -65,23 +72,27 @@ const ScheduleScreen = () => {
     const userId = FIREBASE_AUTH.currentUser?.uid;
 
     if (!userId) {
-      console.error()
-      return
+      console.error();
+      return;
     }
-    
+
     const eventsRef = collection(FIREBASE_DATABASE, 'users', userId, 'events');
     const eventsQuery = query(eventsRef, orderBy('createdAt', 'desc'));
 
     // Set up real-time listener
-    const unsubscribe = onSnapshot(eventsQuery, (snapshot) => {
-      const fetchedEvents = snapshot.docs.map((doc) => ({
-        id: doc.id, // Get the Firestore document ID for keyExtractor
-        ...doc.data(),
-      }));
-      setEvents(fetchedEvents);
-    }, (err) => {
-      console.error('Error fetching evens:', err);
-    });
+    const unsubscribe = onSnapshot(
+      eventsQuery,
+      (snapshot) => {
+        const fetchedEvents = snapshot.docs.map((doc) => ({
+          id: doc.id, // Get the Firestore document ID for keyExtractor
+          ...doc.data(),
+        }));
+        setEvents(fetchedEvents);
+      },
+      (err) => {
+        console.error('Error fetching events:', err);
+      }
+    );
 
     // Cleanup function: Unsubscribe when component unmounts
     return () => unsubscribe();
@@ -99,7 +110,7 @@ const ScheduleScreen = () => {
             </Text>
             <FlatList
               data={events}
-              renderItem={({ item }) => <EventCard {...item}/>}
+              renderItem={({ item }) => <EventCard {...item} />}
               keyExtractor={(item) => item.id}
             />
           </View>
@@ -111,7 +122,9 @@ const ScheduleScreen = () => {
             </Text>
             <FlatList
               data={tasks}
-              renderItem={({ item }) => <TaskCard task={item} isExpanded={false} />}
+              renderItem={({ item }) => (
+                <TaskCard task={item} onPress={handleTaskCardPress} isExpanded={item.id === expandedTaskId} />
+              )}
               keyExtractor={(item) => item.id}
             />
           </View>

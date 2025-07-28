@@ -11,6 +11,8 @@ import backSign from '@/assets/icons/backSign.png';
 import check from '@/assets/icons/check.png';
 import checkCircle from '@/assets/icons/checkCircle.png';
 import close from '@/assets/icons/close.png';
+import edit from '@/assets/icons/edit.png';
+import trash from '@/assets/icons/trash.png';
 
 // Faculty Icons
 import arts from '@/assets/icons/arts.png';
@@ -37,6 +39,8 @@ const icons = {
   check,
   checkCircle,
   close,
+  edit,
+  trash,
 
   // Faculties
   arts,
