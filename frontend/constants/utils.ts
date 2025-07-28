@@ -2,8 +2,8 @@ import {
   FIREBASE_AUTH,
   FIREBASE_DATABASE,
   FIREBASE_STORAGE,
-} from "@/firebaseConfig";
-import * as ImagePicker from "expo-image-picker";
+} from '@/firebaseConfig';
+import * as ImagePicker from 'expo-image-picker';
 import {
   addDoc,
   collection,
@@ -20,20 +20,22 @@ import {
   Timestamp,
   updateDoc,
   where,
-} from "firebase/firestore";
-import { UserCredential } from "firebase/auth";
-import values from "./values";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+} from 'firebase/firestore';
+import { UserCredential } from 'firebase/auth';
+import values from './values';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { Task } from '@/interfaces/interfaces';
+import helperFunctions from './helperFunctions';
 
 // Functions with important functionality which should be in Firebase Cloud Functions
 export const initialiseUserDoc = async (response: UserCredential) => {
   // Initialise user document in Firestore user collection
-  const userId = FIREBASE_AUTH.currentUser?.uid || "";
-  const userDocRef = doc(FIREBASE_DATABASE, "users", userId);
+  const userId = FIREBASE_AUTH.currentUser?.uid || '';
+  const userDocRef = doc(FIREBASE_DATABASE, 'users', userId);
   await setDoc(userDocRef, {
     email: response.user.email,
-    displayName: response.user.displayName || "",
-    profilePic: "",
+    displayName: response.user.displayName || '',
+    profilePic: '',
     totalFocusTime: 0, // in seconds
     coins: 0,
     createdAt: serverTimestamp(),
@@ -48,10 +50,10 @@ export const initialiseUserDoc = async (response: UserCredential) => {
   // Initialise tasks subcollection for user
   await addTask({
     userDocRef: userDocRef,
-    title: "Example Task",
-    description: "This is a Task",
+    title: 'Example Task',
+    description: 'This is a Task',
     deadline: new Date(2025, 5, 30), // Date's months are 0-indexed, this is 30 June
-    importance: "low",
+    importance: 'low',
     estimatedDurationMinutes: 60,
     completed: false,
   });
@@ -59,57 +61,57 @@ export const initialiseUserDoc = async (response: UserCredential) => {
   // Initialise events subcollection for user
   await addEvent({
     userDocRef: userDocRef,
-    title: "Example Event",
-    description: "This is an Event",
+    title: 'Example Event',
+    description: 'This is an Event',
     startDate: new Date(), // is a datetime
     endDate: new Date(Date.now() + 1000 * 60 * 60), // is a datetime
     travelTimeTo: 0, // time in minutes unavailable while travelling to event destination
     travelTimeBack: 0, // time in minutes needed to get back to being available
-    source: "manual", // e.g. manual input / NUSMods integration
+    source: 'manual', // e.g. manual input / NUSMods integration
   });
 
   // Initialise friends subcollection for user
-  await addFriend({ userDocRef: userDocRef, friendId: "Example Friend ID" });
+  await addFriend({ userDocRef: userDocRef, friendId: 'Example Friend ID' });
 };
 
 export const updateUserDocForLogin = async (response: UserCredential) => {
-  const userId = FIREBASE_AUTH.currentUser?.uid || "";
-  const userDocRef = doc(FIREBASE_DATABASE, "users", userId);
+  const userId = FIREBASE_AUTH.currentUser?.uid || '';
+  const userDocRef = doc(FIREBASE_DATABASE, 'users', userId);
   const userSnap = await getDoc(userDocRef);
 
   if (userSnap.exists()) {
     const userData = userSnap.data();
 
     // Ensure coins field is present
-    if (userData && typeof userData.coins === "undefined") {
+    if (userData && typeof userData.coins === 'undefined') {
       await updateDoc(userDocRef, {
         coins: 0, // Initialise as 0
       });
-      console.log("coins field in current user document added");
+      console.log('coins field in current user document added');
     }
 
     // Ensure createdAt field is present
-    if (userData && typeof userData.createdAt === "undefined") {
+    if (userData && typeof userData.createdAt === 'undefined') {
       await updateDoc(userDocRef, {
         createdAt: serverTimestamp(),
       });
-      console.log("createdAt field in current user document added");
+      console.log('createdAt field in current user document added');
     }
 
     // Ensure email field is present
-    if (userData && typeof userData.email === "undefined") {
+    if (userData && typeof userData.email === 'undefined') {
       await updateDoc(userDocRef, {
         email: FIREBASE_AUTH.currentUser?.email,
       });
-      console.log("email field in current user document added");
+      console.log('email field in current user document added');
     }
 
     // Ensure totalFocusTime (in minutes) field is present
-    if (userData && typeof userData.totalFocusTime === "undefined") {
+    if (userData && typeof userData.totalFocusTime === 'undefined') {
       await updateDoc(userDocRef, {
         totalFocusTime: 0, // Initialise as 0 min
       });
-      console.log("email field in current user document added");
+      console.log('email field in current user document added');
     }
 
     // Also just update other markings
@@ -118,9 +120,9 @@ export const updateUserDocForLogin = async (response: UserCredential) => {
     });
   } else {
     // user document not found in database -> old user from before Firestore was connected
-    console.log("Login Issue: user document does not exist: ", userId);
+    console.log('Login Issue: user document does not exist: ', userId);
     initialiseUserDoc(response);
-    console.log("Initialised user document for user: ", userId);
+    console.log('Initialised user document for user: ', userId);
   }
 };
 
@@ -135,7 +137,7 @@ export const uploadProfilePic = async () => {
   });
 
   if (result.canceled)
-    return { success: false, message: "Image selection cancelled" };
+    return { success: false, message: 'Image selection cancelled' };
 
   // Convert image to blob for upload
   const uri = result.assets[0].uri;
@@ -144,7 +146,7 @@ export const uploadProfilePic = async () => {
 
   // Upload to Firebase Storage
   const userId = FIREBASE_AUTH.currentUser?.uid;
-  if (!userId) return { success: false, message: "User not authenticated." };
+  if (!userId) return { success: false, message: 'User not authenticated.' };
 
   const storageRef = ref(FIREBASE_STORAGE, `profilePics/${userId}/profile.jpg`);
   await uploadBytes(storageRef, blob);
@@ -153,14 +155,14 @@ export const uploadProfilePic = async () => {
   const downloadURL = await getDownloadURL(storageRef);
 
   // Update user document with profile picture URL
-  const userDocRef = doc(FIREBASE_DATABASE, "users", userId);
+  const userDocRef = doc(FIREBASE_DATABASE, 'users', userId);
   await updateDoc(userDocRef, {
     profilePic: downloadURL,
   });
 
   return {
     success: true,
-    message: "Profile picture uploaded successfully.",
+    message: 'Profile picture uploaded successfully.',
     url: downloadURL,
   };
 };
@@ -170,7 +172,7 @@ export async function getFocusStats(userId: string) {
   const startOfToday = new Date(
     now.getFullYear(),
     now.getMonth(),
-    now.getDate(),
+    now.getDate()
   );
   const startOfWeek = new Date(now);
   startOfWeek.setDate(now.getDate() - 6); // 7 days ago
@@ -178,42 +180,42 @@ export async function getFocusStats(userId: string) {
 
   const sessionsRef = collection(
     FIREBASE_DATABASE,
-    "users",
+    'users',
     userId,
-    "focusSessions",
+    'focusSessions'
   );
 
   // Daily
   const dailyQuery = query(
     sessionsRef,
-    where("timestamp", ">=", Timestamp.fromDate(startOfToday)),
+    where('timestamp', '>=', Timestamp.fromDate(startOfToday))
   );
   const dailySnap = await getDocs(dailyQuery);
   const dailyFocusSeconds = dailySnap.docs.reduce(
     (total, doc) => total + (doc.data().duration || 0),
-    0,
+    0
   );
 
   // Weekly
   const weeklyQuery = query(
     sessionsRef,
-    where("timestamp", ">=", Timestamp.fromDate(startOfWeek)),
+    where('timestamp', '>=', Timestamp.fromDate(startOfWeek))
   );
   const weeklySnap = await getDocs(weeklyQuery);
   const weeklyFocusSeconds = weeklySnap.docs.reduce(
     (total, doc) => total + (doc.data().duration || 0),
-    0,
+    0
   );
 
   // Monthly
   const monthlyQuery = query(
     sessionsRef,
-    where("timestamp", ">=", Timestamp.fromDate(startOfMonth)),
+    where('timestamp', '>=', Timestamp.fromDate(startOfMonth))
   );
   const monthlySnap = await getDocs(monthlyQuery);
   const monthlyFocusSeconds = monthlySnap.docs.reduce(
     (total, doc) => total + (doc.data().duration || 0),
-    0,
+    0
   );
 
   return { dailyFocusSeconds, weeklyFocusSeconds, monthlyFocusSeconds };
@@ -268,11 +270,11 @@ async function addTask({
   title: string;
   description: string;
   deadline: Date | null; // Date's months are 0-indexed
-  importance: "low" | "medium" | "high";
+  importance: 'low' | 'medium' | 'high';
   estimatedDurationMinutes: number;
   completed?: boolean;
 }) {
-  const tasksCollectionRef = collection(userDocRef, "tasks");
+  const tasksCollectionRef = collection(userDocRef, 'tasks');
   await addDoc(tasksCollectionRef, {
     title: title,
     description: description,
@@ -291,7 +293,7 @@ async function addEvent({
   endDate,
   travelTimeTo = 0,
   travelTimeBack = 0,
-  source = "manual",
+  source = 'manual',
 }: {
   userDocRef: DocumentReference<DocumentData, DocumentData>;
   title: string;
@@ -300,9 +302,9 @@ async function addEvent({
   endDate: Date; // is a datetime
   travelTimeTo?: number; // time in minutes unavailable while travelling to event destination
   travelTimeBack?: number; // time in minutes needed to get back to being available
-  source?: "manual" | "NUSMods"; // e.g. manual input / NUSMods integration
+  source?: 'manual' | 'NUSMods'; // e.g. manual input / NUSMods integration
 }) {
-  const eventsCollectionRef = collection(userDocRef, "events");
+  const eventsCollectionRef = collection(userDocRef, 'events');
   await addDoc(eventsCollectionRef, {
     title: title,
     description: description,
@@ -323,7 +325,7 @@ async function addFriend({
   userDocRef: DocumentReference<DocumentData, DocumentData>;
   friendId: string;
 }) {
-  const friendsCollectionRef = collection(userDocRef, "friends");
+  const friendsCollectionRef = collection(userDocRef, 'friends');
   await addDoc(friendsCollectionRef, {
     friendId: friendId,
     acceptedAt: serverTimestamp(),
@@ -338,12 +340,12 @@ export async function addFriendByEmail({
   friendEmail: string;
 }) {
   // Query firestore for user with this email
-  const usersRef = collection(FIREBASE_DATABASE, "users");
-  const q = query(usersRef, where("email", "==", friendEmail));
+  const usersRef = collection(FIREBASE_DATABASE, 'users');
+  const q = query(usersRef, where('email', '==', friendEmail));
   const querySnapshot = await getDocs(q);
 
   if (querySnapshot.empty) {
-    return { success: false, message: "No user found with that email." };
+    return { success: false, message: 'No user found with that email.' };
   }
 
   // Get friend's UID, first matching document
@@ -363,19 +365,19 @@ export async function removeFriend({
   userDocRef: DocumentReference<DocumentData, DocumentData>;
   friendId: string;
 }) {
-  const friendsCollectionRef = collection(userDocRef, "friends");
-  const q = query(friendsCollectionRef, where("friendId", "==", friendId));
+  const friendsCollectionRef = collection(userDocRef, 'friends');
+  const q = query(friendsCollectionRef, where('friendId', '==', friendId));
   const querySnapshot = await getDocs(q);
 
   if (querySnapshot.empty) {
-    return { success: false, message: "Friend not found." };
+    return { success: false, message: 'Friend not found.' };
   }
 
   // Remove the first matching document
   const friendDoc = querySnapshot.docs[0];
   await deleteDoc(friendDoc.ref);
 
-  return { success: true, message: "Friend removed successfully." };
+  return { success: true, message: 'Friend removed successfully.' };
 }
 
 export async function buyPack(pack: {
@@ -384,24 +386,24 @@ export async function buyPack(pack: {
   price: number;
 }) {
   const userId = FIREBASE_AUTH.currentUser?.uid;
-  if (!userId) throw new Error("User not authenticated.");
+  if (!userId) throw new Error('User not authenticated.');
 
-  const userDocRef = doc(FIREBASE_DATABASE, "users", userId);
+  const userDocRef = doc(FIREBASE_DATABASE, 'users', userId);
   const packDocId = `${pack.setCode}-${pack.packTier}`;
-  const packRef = doc(FIREBASE_DATABASE, "users", userId, "packs", packDocId);
+  const packRef = doc(FIREBASE_DATABASE, 'users', userId, 'packs', packDocId);
 
   await runTransaction(FIREBASE_DATABASE, async (transaction) => {
     const userSnap = await transaction.get(userDocRef);
     const packSnap = await transaction.get(packRef);
 
     if (!userSnap.exists()) {
-      throw new Error("User document does not exist.");
+      throw new Error('User document does not exist.');
     }
     const userData = userSnap.data();
     const currentCoins = userData.coins ?? 0;
 
     if (currentCoins < pack.price) {
-      throw new Error("Insuffient coins");
+      throw new Error('Insuffient coins');
     }
 
     // Deduct coins
@@ -428,26 +430,26 @@ export async function buyPack(pack: {
 }
 
 // Helper: Get random rarity based on probabilities
-function getRandomRarity(): "Common" | "Uncommon" | "Rare" | "Double Rare" {
+function getRandomRarity(): 'Common' | 'Uncommon' | 'Rare' | 'Double Rare' {
   const rand = Math.random();
-  if (rand < 0.74) return "Common";
-  if (rand < 0.94) return "Uncommon";
-  if (rand < 0.99) return "Rare";
-  return "Double Rare";
+  if (rand < 0.74) return 'Common';
+  if (rand < 0.94) return 'Uncommon';
+  if (rand < 0.99) return 'Rare';
+  return 'Double Rare';
 }
 
 // Helper: Guaranteed rare or better
-function getGuaranteedRareRarity(): "Rare" | "Double Rare" {
-  return Math.random() < 0.9 ? "Rare" : "Double Rare";
+function getGuaranteedRareRarity(): 'Rare' | 'Double Rare' {
+  return Math.random() < 0.9 ? 'Rare' : 'Double Rare';
 }
 
 // Main: Open a pack for the user
 export async function openPackForUser(): Promise<any[]> {
   const userId = FIREBASE_AUTH.currentUser?.uid;
-  if (!userId) throw new Error("User not authenticated.");
+  if (!userId) throw new Error('User not authenticated.');
 
   // Fetch all cards
-  const allCardsRef = collection(FIREBASE_DATABASE, "cards");
+  const allCardsRef = collection(FIREBASE_DATABASE, 'cards');
   const allCardsSnap = await getDocs(allCardsRef);
   const allCards = allCardsSnap.docs.map((doc) => ({
     id: doc.id,
@@ -459,7 +461,7 @@ export async function openPackForUser(): Promise<any[]> {
     Common: [],
     Uncommon: [],
     Rare: [],
-    "Double Rare": [],
+    'Double Rare': [],
   };
   allCards.forEach((card) => {
     if (rarityMap[card.rarity]) rarityMap[card.rarity].push(card);
@@ -470,7 +472,7 @@ export async function openPackForUser(): Promise<any[]> {
   for (let i = 0; i < 5; i++) rarities.push(getRandomRarity());
 
   // Guarantee at least one Rare or better
-  if (!rarities.some((r) => r === "Rare" || r === "Double Rare")) {
+  if (!rarities.some((r) => r === 'Rare' || r === 'Double Rare')) {
     const guaranteedRarity = getGuaranteedRareRarity();
     const replaceIdx = Math.floor(Math.random() * 5);
     rarities[replaceIdx] = guaranteedRarity;
@@ -491,13 +493,13 @@ export async function openPackForUser(): Promise<any[]> {
   const minimalCards: any[] = [];
   for (const card of selectedCards) {
     const cardNum = card.id.slice(-3); // e.g. "060"
-    const setCode = "BASE";
+    const setCode = 'BASE';
     const cardRef = doc(
       FIREBASE_DATABASE,
-      "users",
+      'users',
       userId,
-      "ownedCards",
-      card.id, // doc name is full id, e.g. "BASE060"
+      'ownedCards',
+      card.id // doc name is full id, e.g. "BASE060"
     );
     await runTransaction(FIREBASE_DATABASE, async (transaction) => {
       const cardSnap = await transaction.get(cardRef);
@@ -529,6 +531,47 @@ export async function openPackForUser(): Promise<any[]> {
   return minimalCards;
 }
 
+// StudyMon's Task Sorting Algorithm
+const taskPriorityComparator = (task1: Task, task2: Task): number => {
+  const currentTime = new Date();
+
+  // Rule 1: Prioritize tasks with deadlines that would be failed if not done immediately
+  const task1BreaksDeadline = helperFunctions.isTaskDeadlineClose(
+    task1,
+    currentTime
+  );
+  const task2BreaksDeadline = helperFunctions.isTaskDeadlineClose(
+    task2,
+    currentTime
+  );
+
+  if (task1BreaksDeadline && !task2BreaksDeadline) return -1; // task1 comes first if A would fail and B would not
+  if (!task1BreaksDeadline && task2BreaksDeadline) return 1; // task2 comes first if B would fail and A would not
+
+  // Rule 2: Prioritize tasks by importance (High > Medium > Low)
+  const importance1 = helperFunctions.getImportanceRank(task1.importance);
+  const importance2 = helperFunctions.getImportanceRank(task2.importance);
+  if (importance1 !== importance2) {
+    return importance2 - importance1;
+  }
+
+  // Rule 3: Prioritize tasks with deadlines
+  if (task1.deadline && !task2.deadline) return -1;
+  if (task2.deadline && !task1.deadline) return 1;
+
+  // Rule 3.5: Prioritize tasks by earlier deadlines
+  // @ts-ignore
+  const deadlineA = task1.deadline.toDate().getTime(); // Convert Firestore Timestamp to milliseconds
+  // @ts-ignore
+  const deadlineB = task2.deadline.toDate().getTime();
+  if (deadlineA !== deadlineB) {
+    return deadlineA - deadlineB; // Ascending order (Earlier deadline comes first)
+  }
+
+  // Else whatever
+  return -1;
+};
+
 const utils = {
   initialiseUserDoc,
   updateUserDocForLogin,
@@ -541,6 +584,7 @@ const utils = {
   addFriendByEmail,
   removeFriend,
   buyPack,
+  taskPriorityComparator,
 };
 
 export default utils;

@@ -12,6 +12,8 @@ import {
 } from 'firebase/firestore';
 import TaskCard from '@/components/TaskCard';
 import EventCard from '@/components/EventCard';
+import utils from '@/constants/utils';
+import { Task } from '@/interfaces/interfaces';
 
 const ScheduleScreen = () => {
   // Handle Button Presses
@@ -38,15 +40,19 @@ const ScheduleScreen = () => {
     }
     
     const tasksRef = collection(FIREBASE_DATABASE, 'users', userId, 'tasks');
-    const tasksQuery = query(tasksRef, orderBy('importance', 'desc'));
+    const tasksQuery = query(tasksRef);
 
     // Set up real-time listener
     const unsubscribe = onSnapshot(tasksQuery, (snapshot) => {
       const fetchedTasks = snapshot.docs.map((doc) => ({
         id: doc.id, // Get the Firestore document ID for keyExtractor
         ...doc.data(),
-      }));
-      setTasks(fetchedTasks);
+      })) as Task[];
+      
+      // Sort tasks according to StudyMon Algorithm
+      const sortedTasks = [...fetchedTasks].sort(utils.taskPriorityComparator);
+
+      setTasks(sortedTasks);
     }, (err) => {
       console.error('Error fetching tasks:', err);
     });

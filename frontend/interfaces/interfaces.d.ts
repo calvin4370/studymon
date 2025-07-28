@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore";
+import { Timestamp } from 'firebase/firestore';
 
 interface OwnedCardProps {
   cardNum: string;
@@ -13,7 +13,7 @@ interface AllCardProps {
   category: string;
   faculty?: string;
   id: string;
-  name: string
+  name: string;
   rarity: string;
   set: string;
   year?: string;
@@ -24,11 +24,11 @@ interface DisplayCardProps {
   category?: string;
   faculty?: string;
   id: string; // only compulsory
-  name?: string
+  name?: string;
   rarity?: string;
   set?: string;
   year?: string;
-  
+
   cardNum?: string;
   lastObtained?: string;
   numOwned?: number;
@@ -36,21 +36,23 @@ interface DisplayCardProps {
 }
 
 interface Task {
-  title: string
-  description: string
-  estimatedDurationMinutes: number
-  deadline?: Timestamp | null
-  importance: 'low' | 'medium' | 'high'
-  completed: boolean
+  id: string;
+  title: string;
+  description: string;
+  estimatedDurationMinutes: number;
+  deadline?: Timestamp | null;
+  importance: 'low' | 'medium' | 'high';
+  completed: boolean;
 }
 
 interface Event {
-  title: string
-  description: string
-  startDate: Timestamp
-  endDate: Timestamp
-  createdAt: Timestamp
-  travelTimeTo: number
-  travelTimeBack: number
-  source: 'manual' | 'NUSMods'
+  id: string;
+  title: string;
+  description: string;
+  startDate: Timestamp;
+  endDate: Timestamp;
+  createdAt: Timestamp;
+  travelTimeTo: number;
+  travelTimeBack: number;
+  source: 'manual' | 'NUSMods';
 }

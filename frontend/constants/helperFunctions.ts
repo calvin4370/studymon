@@ -1,3 +1,5 @@
+import { Task } from '@/interfaces/interfaces';
+
 // Helper function to add leading 0 to number (up to 2 digits)
 function padWithZero(num: number): string {
   return num.toString().padStart(2, '0');
@@ -68,13 +70,45 @@ function formatTimeAsShort(seconds: number) {
 
 function importanceStars(importance: 'low' | 'medium' | 'high') {
   if (importance === 'low') {
-    return '★'
+    return '★';
   } else if (importance === 'medium') {
-    return '★★'
+    return '★★';
   } else if (importance === 'high') {
-    return '★★★'
+    return '★★★';
   }
 }
+
+function getImportanceRank(importance: 'low' | 'medium' | 'high'): number {
+  switch (importance) {
+    case 'high':
+      return 3;
+    case 'medium':
+      return 2;
+    case 'low':
+      return 1;
+    default:
+      return 0;
+  }
+}
+
+const isTaskDeadlineClose = (
+  task: Task,
+  currentTime: Date = new Date(),
+  bufferHours: number = 0
+): boolean => {
+  if (task.completed) {
+    return false;
+  } else if (!task.deadline) {
+    return false;
+  }
+
+  const deadlineTime = task.deadline.toDate().getTime();
+  const estimatedCompletionTime =
+    currentTime.getTime() + task.estimatedDurationMinutes * 60 * 1000;
+  const bufferTime = bufferHours * 60 * 60 * 1000;
+
+  return estimatedCompletionTime + bufferTime >= deadlineTime;
+};
 
 const helperFunctions = {
   padWithZero,
@@ -82,6 +116,8 @@ const helperFunctions = {
   formatTimeAsSentence,
   formatTimeAsShort,
   importanceStars,
+  getImportanceRank,
+  isTaskDeadlineClose,
 };
 
 export default helperFunctions;
