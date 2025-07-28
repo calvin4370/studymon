@@ -8,7 +8,6 @@ import CardDetailsModal from '@/components/CardDetailsModal';
 import values from '@/constants/values';
 
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
-import { collection, getDocs } from 'firebase/firestore';
 import { DisplayCardProps } from '@/interfaces/interfaces';
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 
