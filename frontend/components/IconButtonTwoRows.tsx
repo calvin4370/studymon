@@ -25,6 +25,7 @@ const IconButtonTwoRows = ({
   return (
     <TouchableOpacity
       onPress={onButtonPress}
+      activeOpacity={0.7}
       className={`flex-row w-[120px] h-[63px] bg-background border-[3px] border-primary 
         items-center justify-center rounded-[10px] rounded-tl-[20px] rounded-br-[20px] px-[18px] py-[7px] ${className}`}
     >

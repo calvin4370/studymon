@@ -16,7 +16,7 @@ interface SaveButtonProps {
 
 const SaveButton = ({ className, onButtonPress }: SaveButtonProps) => {
   return (
-    <TouchableOpacity onPress={onButtonPress}>
+    <TouchableOpacity onPress={onButtonPress} activeOpacity={0.7}>
       <View
         className={`flex-row gap-[5px] w-[80px] h-[35px] border-[2px] border-accent-1 bg-primary-1
         rounded-[20px] items-center justify-center ${className}`}

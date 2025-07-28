@@ -31,7 +31,7 @@ const RectangleButton = ({
   const rectangleButtonWidth = (windowWidth - 20 * 2 - 10) / 2;
 
   return (
-    <TouchableOpacity onPress={onButtonPress}>
+    <TouchableOpacity onPress={onButtonPress} activeOpacity={0.7}>
       <View
         className={`flex-row bg-accent-1 border-[2px] items-center justify-center border-primary rounded-full gap-[10px] ${className}`}
         style={[

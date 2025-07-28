@@ -1,14 +1,19 @@
-import { View, Text, TouchableOpacity, GestureResponderEvent } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  GestureResponderEvent,
+} from 'react-native';
 import React from 'react';
 
 interface CloseButtonProps {
   className?: string;
-  onButtonPress?: (event: GestureResponderEvent) => void | undefined
+  onButtonPress?: (event: GestureResponderEvent) => void | undefined;
 }
 
-const CloseButton = ({className, onButtonPress}: CloseButtonProps) => {
+const CloseButton = ({ className, onButtonPress }: CloseButtonProps) => {
   return (
-    <TouchableOpacity onPress={onButtonPress}>
+    <TouchableOpacity onPress={onButtonPress} activeOpacity={0.7}>
       <View
         className={`flex-row w-[30px] h-[30px] bg-background border-[2px] items-center justify-center border-text rounded-full px-[4px] pt-[0px] pb-[5px] ${className}`}
       >
@@ -16,6 +21,6 @@ const CloseButton = ({className, onButtonPress}: CloseButtonProps) => {
       </View>
     </TouchableOpacity>
   );
-}
+};
 
 export default CloseButton;

@@ -22,7 +22,7 @@ const OpenedCard = ({ cardNum, initialFace = 'down' }: OpenedCardProps) => {
   return (
     <View className=''>
       {face === 'down' ? (
-        <TouchableOpacity onPress={handleCardPress}>
+        <TouchableOpacity onPress={handleCardPress} activeOpacity={0.7}>
           <Image
             source={cardBackImageSource}
             className='w-[126px] h-[176px]'

@@ -111,7 +111,7 @@ const ScheduleScreen = () => {
             </Text>
             <FlatList
               data={tasks}
-              renderItem={({ item }) => <TaskCard {...item}/>}
+              renderItem={({ item }) => <TaskCard task={item} isExpanded={false} />}
               keyExtractor={(item) => item.id}
             />
           </View>

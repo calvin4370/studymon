@@ -15,11 +15,11 @@ const OwnedCardCard = (
   const imageSource = cardArtMap[cardArtPath]; // Only works for BASE set for now, add ${item.setCode} later
 
   const onCardPress = () => {
-    handleCardSelect({ cardNum, id, lastObtained, numOwned, setCode })
-  }
+    handleCardSelect({ cardNum, id, lastObtained, numOwned, setCode });
+  };
 
   return (
-    <TouchableOpacity onPress={onCardPress}>
+    <TouchableOpacity onPress={onCardPress} activeOpacity={0.7}>
       <View className='overflow-hidden'>
         <Image
           source={imageSource}

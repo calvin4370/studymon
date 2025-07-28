@@ -5,12 +5,17 @@ import colors from '@/constants/colors';
 
 interface SearchButtonProps {
   className?: string;
-  onSearchButtonPress?: (event: GestureResponderEvent) => void | undefined
+  onSearchButtonPress?: (event: GestureResponderEvent) => void | undefined;
 }
 
-const SearchButton = ({className = '', onSearchButtonPress} : SearchButtonProps) => {
+const SearchButton = ({
+  className = '',
+  onSearchButtonPress,
+}: SearchButtonProps) => {
   return (
-    <TouchableOpacity onPress={onSearchButtonPress}
+    <TouchableOpacity
+      onPress={onSearchButtonPress}
+      activeOpacity={0.7}
       className={`flex-row w-[50px] h-[50px] bg-background border-[3px] items-center justify-center border-primary rounded-full ${className}`}
     >
       <Ionicons name='search' size={28} color={colors.text} />

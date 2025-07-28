@@ -4,9 +4,9 @@ import {
   Image,
   TouchableOpacity,
   GestureResponderEvent,
-} from "react-native";
-import React from "react";
-import NumOwnedPill from "@/components/NumOwnedPill";
+} from 'react-native';
+import React from 'react';
+import NumOwnedPill from '@/components/NumOwnedPill';
 
 interface PackCardProps {
   numOwned: number;
@@ -19,17 +19,17 @@ interface PackCardProps {
 // Pass display name and image into PackCard for display
 const PackCard = ({ numOwned, name, image, onPackPress }: PackCardProps) => {
   return (
-    <View className="items-center">
-      <TouchableOpacity onPress={onPackPress}>
+    <View className='items-center'>
+      <TouchableOpacity onPress={onPackPress} activeOpacity={0.7}>
         <Image
           source={image}
-          className="w-[126px] h-[176px]"
+          className='w-[126px] h-[176px]'
           width={126}
           height={176}
-          resizeMode="cover"
+          resizeMode='cover'
         />
       </TouchableOpacity>
-      <Text className={"mb-2 font-bold text-text>"}>{name}</Text>
+      <Text className={'mb-2 font-bold text-text>'}>{name}</Text>
       <NumOwnedPill numOwned={numOwned} />
     </View>
   );
