@@ -23,12 +23,12 @@ const ScheduleScreen = () => {
 
   const handleEventCardPress = (eventId: string) => {
     // Unexpanded the previously expanded EventCard if expanded, and if a new EventCard is pressed, expand that one
-    setExpandedEventId(prevId => (prevId === eventId ? null : eventId));
+    setExpandedEventId((prevId) => (prevId === eventId ? null : eventId));
   };
 
   const handleTaskCardPress = (taskId: string) => {
     // Unexpanded the previously expanded TaskCard if expanded, and if a new TaskCard is pressed, expand that one
-    setExpandedTaskId(prevId => (prevId === taskId ? null : taskId));
+    setExpandedTaskId((prevId) => (prevId === taskId ? null : taskId));
   };
 
   // States
@@ -117,7 +117,11 @@ const ScheduleScreen = () => {
             <FlatList
               data={events}
               renderItem={({ item }) => (
-                <EventCard event={item} onPress={handleEventCardPress} isExpanded={item.id === expandedEventId} />
+                <EventCard
+                  event={item}
+                  onPress={handleEventCardPress}
+                  isExpanded={item.id === expandedEventId}
+                />
               )}
               keyExtractor={(item) => item.id}
             />
@@ -131,7 +135,11 @@ const ScheduleScreen = () => {
             <FlatList
               data={tasks}
               renderItem={({ item }) => (
-                <TaskCard task={item} onPress={handleTaskCardPress} isExpanded={item.id === expandedTaskId} />
+                <TaskCard
+                  task={item}
+                  onPress={handleTaskCardPress}
+                  isExpanded={item.id === expandedTaskId}
+                />
               )}
               keyExtractor={(item) => item.id}
             />

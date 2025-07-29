@@ -9,14 +9,13 @@ import values from '@/constants/values';
 
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
 import { DisplayCardProps } from '@/interfaces/interfaces';
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
-
+import { collection, getDocs, onSnapshot } from 'firebase/firestore';
 
 const CollectionScreen = () => {
   const router = useRouter();
 
   // States
-  const [viewState, setViewState] = useState("collectionOnly");
+  const [viewState, setViewState] = useState('collectionOnly');
   const [ownedCards, setOwnedCards] = useState<any[]>([]); // Quickfix, Figure out what to do with the any type later
   const [allCards, setAllCards] = useState<any[]>([]);
   // // State to track if data is still being loaded so can show spinning icon while waiting
@@ -37,7 +36,7 @@ const CollectionScreen = () => {
         // setErrorFetchingCards(null);
 
         // Fetch all cards from 'cards' collection (masterlist of all cards in app)
-        const allCardsRef = collection(FIREBASE_DATABASE, "cards");
+        const allCardsRef = collection(FIREBASE_DATABASE, 'cards');
         const allCardsSnap = await getDocs(allCardsRef);
         const fetchedAllCards = allCardsSnap.docs.map((doc) => ({
           id: doc.id,
@@ -50,9 +49,9 @@ const CollectionScreen = () => {
         if (userId) {
           const ownedCardsRef = collection(
             FIREBASE_DATABASE,
-            "users",
+            'users',
             userId,
-            "ownedCards",
+            'ownedCards'
           );
           const unsubscribe = onSnapshot(ownedCardsRef, (snapshot) => {
             const fetchedOwnedCards = snapshot.docs.map((doc) => ({
@@ -63,11 +62,11 @@ const CollectionScreen = () => {
           });
           return () => unsubscribe();
         } else {
-          console.warn("Cannot find userId for current user");
+          console.warn('Cannot find userId for current user');
           setOwnedCards([]);
         }
       } catch (error: any) {
-        console.error("Error fetching card data:", error);
+        console.error('Error fetching card data:', error);
         // setErrorFetchingCards(
         //   `ERROR in loading cards: ${error.message || 'Unknown error'}`
         // );
@@ -81,28 +80,28 @@ const CollectionScreen = () => {
 
   // Function definitions for Buttons
   const handleOpenPacksButtonPress = () => {
-    router.push("/(drawer)/PackOpeningScreen");
+    router.push('/(drawer)/PackOpeningScreen');
   };
 
   const handleBuyPacksButtonPress = () => {
-    router.push("/(drawer)/StoreScreen");
+    router.push('/(drawer)/StoreScreen');
   };
 
   const handleSwitchButtonToggle = () => {
-    if (viewState === "collectionOnly") {
-      setViewState("allCards");
+    if (viewState === 'collectionOnly') {
+      setViewState('allCards');
     } else {
-      setViewState("collectionOnly");
+      setViewState('collectionOnly');
     }
   };
 
   const onSearchButtonPress = () => {
-    console.log("Search");
-    alert("Search function for card collection TBD");
+    console.log('Search');
+    alert('Search function for card collection TBD');
   };
 
   const onModalCloseButtonPress = () => {
-    console.log("CardDetailsModal Close Button Pressed");
+    console.log('CardDetailsModal Close Button Pressed');
     setCardDetailsModalVisible(false);
   };
 
@@ -113,9 +112,9 @@ const CollectionScreen = () => {
   };
 
   return (
-    <ScrollView className="bg-background pt-[20px] mx-[20px]">
+    <ScrollView className='bg-background pt-[20px] mx-[20px]'>
       <CollectionOverview
-        className="mb-[20px]"
+        className='mb-[20px]'
         cardCount={ownedCards.length}
         onOpenPacksButtonPress={handleOpenPacksButtonPress}
         onBuyPacksButtonPress={handleBuyPacksButtonPress}
@@ -124,15 +123,15 @@ const CollectionScreen = () => {
       />
 
       {/* Show only collectionOnly view or allCards view based on SwitchButton state */}
-      {viewState === "collectionOnly" ? (
+      {viewState === 'collectionOnly' ? (
         ownedCards.length > 0 ? (
           // collectionOnly view and user has at least 1 card to show
           <View>
-            <Text className="text-text font-bold text-[30px] mb-[20px]">
+            <Text className='text-text font-bold text-[30px] mb-[20px]'>
               Collection
             </Text>
             <FlatList
-              className="pb-[50px]"
+              className='pb-[50px]'
               data={ownedCards}
               renderItem={({ item }) => OwnedCardCard(item, handleCardSelect)}
               keyExtractor={(item) =>
@@ -140,7 +139,7 @@ const CollectionScreen = () => {
               }
               numColumns={3}
               columnWrapperStyle={{
-                justifyContent: "flex-start",
+                justifyContent: 'flex-start',
                 gap: 11,
                 marginBottom: 11,
               }}
@@ -149,11 +148,11 @@ const CollectionScreen = () => {
           </View>
         ) : (
           // collectionOnly view and but user has an empty collection
-          <View className="flex-1 justify-center items-center mt-[180px]">
-            <Text className="text-text font-medium text-[32px]">
+          <View className='flex-1 justify-center items-center mt-[180px]'>
+            <Text className='text-text font-medium text-[32px]'>
               Open packs to
             </Text>
-            <Text className="text-text font-medium text-[32px] mb-[100px]">
+            <Text className='text-text font-medium text-[32px] mb-[100px]'>
               collect cards
             </Text>
           </View>
@@ -161,17 +160,17 @@ const CollectionScreen = () => {
       ) : (
         // allCards view
         <View>
-          <Text className="text-text font-bold text-[30px] mb-[20px]">
+          <Text className='text-text font-bold text-[30px] mb-[20px]'>
             Base Set
           </Text>
           <FlatList
-            className="pb-[50px]"
+            className='pb-[50px]'
             data={allCards}
             renderItem={({ item }) => AllCardCard(item, handleCardSelect)}
             keyExtractor={(item) => item.id.toString()}
             numColumns={3}
             columnWrapperStyle={{
-              justifyContent: "flex-start",
+              justifyContent: 'flex-start',
               gap: 11,
               marginBottom: 11,
             }}

@@ -17,27 +17,32 @@ const CoinsPill = ({ className = '', userId }: CoinsPillProps) => {
       setCoins('no user ID');
       return;
     }
-    
+
     const userRef = doc(FIREBASE_DATABASE, 'users', userId);
 
     // onSnapshot listener
-    const unsubscribe = onSnapshot(userRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const userData = docSnap.data(); // grab data from user doc snapshot
-        setCoins(userData.coins || 0);
-      } else {
-        console.warn(`CoinsPill: User document is missing for UserId: ${userId}`);
+    const unsubscribe = onSnapshot(
+      userRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const userData = docSnap.data(); // grab data from user doc snapshot
+          setCoins(userData.coins || 0);
+        } else {
+          console.warn(
+            `CoinsPill: User document is missing for UserId: ${userId}`
+          );
+          setCoins('error');
+        }
+      },
+      (error) => {
+        // Handle any errors that occur during the listener's operation
+        console.error('Error in CoinsPill', error);
         setCoins('error');
       }
-    }, (error) => {
-      // Handle any errors that occur during the listener's operation
-      console.error("Error in CoinsPill", error);
-      setCoins('error');
-    });
+    );
 
     // cleanup step for onSnapshot
     return () => unsubscribe();
-
   }, [userId]);
 
   return (
