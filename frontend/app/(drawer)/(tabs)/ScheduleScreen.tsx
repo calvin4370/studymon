@@ -21,6 +21,11 @@ const ScheduleScreen = () => {
     router.push('../(scheduleScreens)/AddEventScreen');
   };
 
+  const handleEventCardPress = (eventId: string) => {
+    // Unexpanded the previously expanded EventCard if expanded, and if a new EventCard is pressed, expand that one
+    setExpandedEventId(prevId => (prevId === eventId ? null : eventId));
+  };
+
   const handleTaskCardPress = (taskId: string) => {
     // Unexpanded the previously expanded TaskCard if expanded, and if a new TaskCard is pressed, expand that one
     setExpandedTaskId(prevId => (prevId === taskId ? null : taskId));
@@ -30,6 +35,7 @@ const ScheduleScreen = () => {
   const [tasks, setTasks] = useState<any[]>([]); // Quickfix, Figure out what to do with the any type later
   const [events, setEvents] = useState<any[]>([]); // Quickfix, Figure out what to do with the any type later
   const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
+  const [expandedEventId, setExpandedEventId] = useState<string | null>(null);
 
   // Read user's Tasks and Events from firestore
   useEffect(() => {
@@ -77,7 +83,7 @@ const ScheduleScreen = () => {
     }
 
     const eventsRef = collection(FIREBASE_DATABASE, 'users', userId, 'events');
-    const eventsQuery = query(eventsRef, orderBy('createdAt', 'desc'));
+    const eventsQuery = query(eventsRef, orderBy('startDate', 'asc'));
 
     // Set up real-time listener
     const unsubscribe = onSnapshot(
@@ -110,7 +116,9 @@ const ScheduleScreen = () => {
             </Text>
             <FlatList
               data={events}
-              renderItem={({ item }) => <EventCard {...item} />}
+              renderItem={({ item }) => (
+                <EventCard event={item} onPress={handleEventCardPress} isExpanded={item.id === expandedEventId} />
+              )}
               keyExtractor={(item) => item.id}
             />
           </View>
