@@ -3,10 +3,14 @@ module.exports = {
   testMatch: [
     "**/constants/__tests__/*.test.ts",
     "**/app/__tests__/*.test.tsx",
+    "**/components/__tests__/*.test.tsx",
   ],
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
+    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
+  transformIgnorePatterns: [
+    "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)",
+  ],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   collectCoverageFrom: [
     "**/constants/*.ts",
