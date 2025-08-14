@@ -9,12 +9,14 @@ interface EventCardProps {
   event: Event;
   onPress: (eventId: string) => void;
   isExpanded?: boolean;
+  handleDeleteEvent: (eventId: string) => void;
 }
 
 const EventCard: React.FC<EventCardProps> = ({
   event,
   onPress,
   isExpanded,
+  handleDeleteEvent,
 }) => {
   return (
     <TouchableOpacity onPress={() => onPress(event.id)} activeOpacity={0.7}>
@@ -61,12 +63,14 @@ const EventCard: React.FC<EventCardProps> = ({
                 imageClassName='w-[24px] h-[24px]'
                 width={40}
                 height={40}
+                onCircleButtonPress={() => {handleDeleteEvent(event.id)}}
               />
               <CircleButton
                 imageSource={icons.trash}
                 imageClassName='w-[22px] h-[22px]'
                 width={40}
                 height={40}
+                onCircleButtonPress={() => {handleDeleteEvent(event.id)}}
               />
             </View>
           </View>

@@ -10,9 +10,10 @@ interface TaskCardProps {
   task: Task;
   onPress: (taskId: string) => void;
   isExpanded?: boolean;
+  handleDeleteTask: (taskId: string) => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onPress, isExpanded }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, onPress, isExpanded, handleDeleteTask }) => {
   if (!task) {
     console.warn('TaskCard received an undefined task prop!');
     return null; // Don't render anything if task is undefined
@@ -71,12 +72,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onPress, isExpanded }) => {
                 imageClassName='w-[24px] h-[24px]'
                 width={40}
                 height={40}
+                onCircleButtonPress={() => {handleDeleteTask(task.id)}}
               />
               <CircleButton
                 imageSource={icons.trash}
                 imageClassName='w-[22px] h-[22px]'
                 width={40}
                 height={40}
+                onCircleButtonPress={() => {handleDeleteTask(task.id)}}
               />
             </View>
           </View>

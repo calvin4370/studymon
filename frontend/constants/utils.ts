@@ -558,12 +558,13 @@ const taskPriorityComparator = (task1: Task, task2: Task): number => {
   // Rule 3: Prioritize tasks with deadlines
   if (task1.deadline && !task2.deadline) return -1;
   if (task2.deadline && !task1.deadline) return 1;
+  if (!task2.deadline && !task1.deadline) return 1;
 
   // Rule 3.5: Prioritize tasks by earlier deadlines
   // @ts-ignore
-  const deadlineA = task1.deadline.toDate().getTime(); // Convert Firestore Timestamp to milliseconds
+  const deadlineA = task1.deadline.toDate().getTime() ?? Number.MAX_SAFE_INTEGER; // Convert Firestore Timestamp to milliseconds
   // @ts-ignore
-  const deadlineB = task2.deadline.toDate().getTime();
+  const deadlineB = task2.deadline.toDate().getTime() ?? Number.MAX_SAFE_INTEGER;
   if (deadlineA !== deadlineB) {
     return deadlineA - deadlineB; // Ascending order (Earlier deadline comes first)
   }

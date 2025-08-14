@@ -4,13 +4,15 @@ import { router } from 'expo-router';
 import RectangleButton from '@/components/RectangleButton';
 import icons from '@/constants/icons';
 import { FIREBASE_AUTH, FIREBASE_DATABASE } from '@/firebaseConfig';
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import TaskCard from '@/components/TaskCard';
 import EventCard from '@/components/EventCard';
 import utils from '@/constants/utils';
 import { Task } from '@/interfaces/interfaces';
 
 const ScheduleScreen = () => {
+  const userId = FIREBASE_AUTH.currentUser?.uid;
+
   // Handle Button Presses
   const handleAddTaskButtonPress = () => {
     router.push('../(scheduleScreens)/AddTaskScreen');
@@ -26,10 +28,42 @@ const ScheduleScreen = () => {
     setExpandedEventId((prevId) => (prevId === eventId ? null : eventId));
   };
 
+  // EventCard Buttons
+  const handleDeleteEvent = async (eventId: string) => {
+    if (!userId) {
+      console.error('User not authenticated');
+      return;
+    }
+
+    try {
+      const eventDocRef = doc(FIREBASE_DATABASE, 'users', userId, 'events', eventId);
+      await deleteDoc(eventDocRef);
+      console.log('Event deleted');
+    } catch (error) {
+      console.error('Failed to delete event; Error:', error);
+    }
+  }
+
   const handleTaskCardPress = (taskId: string) => {
     // Unexpanded the previously expanded TaskCard if expanded, and if a new TaskCard is pressed, expand that one
     setExpandedTaskId((prevId) => (prevId === taskId ? null : taskId));
   };
+
+  // TaskCard Buttons
+  const handleDeleteTask = async (taskId: string) => {
+    if (!userId) {
+      console.error('User not authenticated');
+      return;
+    }
+
+    try {
+      const taskDocRef = doc(FIREBASE_DATABASE, 'users', userId, 'tasks', taskId);
+      await deleteDoc(taskDocRef);
+      console.log('Task deleted');
+    } catch (error) {
+      console.error('Failed to delete task; Error:', error);
+    }
+  }
 
   // States
   const [tasks, setTasks] = useState<any[]>([]); // Quickfix, Figure out what to do with the any type later
@@ -121,6 +155,7 @@ const ScheduleScreen = () => {
                   event={item}
                   onPress={handleEventCardPress}
                   isExpanded={item.id === expandedEventId}
+                  handleDeleteEvent={handleDeleteEvent}
                 />
               )}
               keyExtractor={(item) => item.id}
@@ -139,6 +174,7 @@ const ScheduleScreen = () => {
                   task={item}
                   onPress={handleTaskCardPress}
                   isExpanded={item.id === expandedTaskId}
+                  handleDeleteTask={handleDeleteTask}
                 />
               )}
               keyExtractor={(item) => item.id}
