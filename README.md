@@ -17,6 +17,7 @@
 - [Algorithms & Logic](#algorithms--logic)
 - [The Team](#the-team)
 
+<a id="problem-statement"></a>
 ## 🧐 Problem Statement
 
 We recognize how difficult it can be to study continuously without frequent distractions from our phones. It can be tempting to take a quick look at our devices while studying, breaking our focus and decreasing our productivity. StudyMon provides a solution to mitigate this issue by motivating students to study more frequently and with better focus.
@@ -27,7 +28,7 @@ We recognize how difficult it can be to study continuously without frequent dist
 - **Earn:** Receive "StudyMon Coins" based on your focus duration.
 - **Collect:** Spend coins on Card Packs to collect NUS-themed trading cards.
 
-
+<a id="core-features"></a>
 ## ✨ Core Features
 
 ### 1. 🔐 **User Authentication:** Secure Email/Password login and registration via Firebase
@@ -87,7 +88,7 @@ We recognize how difficult it can be to study continuously without frequent dist
 
 
 
-
+<a id="tech-stack"></a>
 ## 🛠️ Tech Stack
 
 **Frontend:**
@@ -149,6 +150,8 @@ You can use these Developer Accounts to test functionality without creating a ne
 | `email@email.com` | `password` | Developer Account |
 | `test1@email.com` | `password` | Full Card Collection |
 
+
+<a id="gamification-mechanics"></a>
 ## 🎲 Gamification Mechanics
 
 ### Earning StudyMon Coins
@@ -178,6 +181,8 @@ In addition, each pack has a guaranteed chance to contain at least a Rare or bet
   <img src="images/Card_Algo_Step_2.png" alt="Card_Algo_Step_2" width="600">
 </p>
 
+
+<a id="algorithms--logic"></a>
 ## 🧠 Algorithms & Logic
 
 ### Intelligent TaskSort
@@ -190,6 +195,8 @@ StudyMon uses a custom `taskPriorityComparator` to dynamically rank user tasks. 
 
 This ensures that the "Upcoming Tasks" view always presents the optimal completion order to the student.
 
+
+<a id="the-team"></a>
 ## 👥 The Team
 
 **NUS Orbital 2025 - Team 7236**
