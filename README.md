@@ -105,6 +105,7 @@ We recognize how difficult it can be to study continuously without frequent dist
 * Git & GitHub (Version Control)
 * Generative AI (ChatGPT & Gemini) for card asset generation
 
+<a id="getting-started"></a>
 ## 🚀 Getting Started
 
 ### Method 1: Expo Go (For User Testing)
